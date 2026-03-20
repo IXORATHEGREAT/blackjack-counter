@@ -323,7 +323,7 @@ header p{
 }
 .kbtn.lo::after{color:var(--hot);}
 .kbtn.hi::after{color:var(--cold);}
-.kpad-wrap{margin-bottom:6px;}
+.kpad-wrap{margin-bottom:6px;display:flex;flex-direction:column;gap:5px;}
 .next-hand-btn{
   font-family:'Oswald',sans-serif;
   font-weight:700;
@@ -886,7 +886,7 @@ header p{
       <div class="input-panel">
         <div class="hint" style="margin-bottom:10px;">Dealer's Hand — tap to add cards</div>
         <div class="kpad-wrap">
-          <div class="keypad keypad-4" id="drankrow"></div>
+          <div id="drankrow"></div>
         </div>
         <button class="xbtn" onclick="clearDealer()">✕ Clear Dealer</button>
       </div>
@@ -902,7 +902,7 @@ header p{
         <div id="split-toggle-area"></div>
         <div class="hint" style="margin-bottom:10px;">Your Hand — tap to add cards · tap dealt card to remove</div>
         <div class="kpad-wrap">
-          <div class="keypad keypad-4" id="hrow-top"></div>
+          <div id="hrow-top"></div>
         </div>
         <button class="xbtn" onclick="clearHand()">✕ Clear Hand</button>
       </div>
@@ -1468,12 +1468,12 @@ function buildUI(){
     const el=document.getElementById(containerId);
     if(!el)return;
     el.innerHTML='';
-    // Split into rows of 4
+    el.style.cssText='display:flex;flex-direction:column;gap:5px;';
     for(let i=0;i<ranks.length;i+=4){
-      const row=document.createElement('div');
       const rowRanks=ranks.slice(i,i+4);
-      row.className='keypad keypad-4';
-      if(rowRanks.length<4) row.style.gridTemplateColumns=`repeat(${rowRanks.length},1fr)`;
+      const row=document.createElement('div');
+      // Always use 4 columns so last row buttons match size of others
+      row.style.cssText=`display:grid;grid-template-columns:repeat(4,1fr);gap:5px;`;
       rowRanks.forEach(rank=>{
         const hc=HLC[rank];
         const b=document.createElement('button');
@@ -1483,6 +1483,13 @@ function buildUI(){
         b.onclick=()=>onTap(rank);
         row.appendChild(b);
       });
+      // Fill remaining slots with invisible spacers so K stays same size
+      const remaining=4-rowRanks.length;
+      for(let j=0;j<remaining;j++){
+        const spacer=document.createElement('div');
+        spacer.style.cssText='visibility:hidden;';
+        row.appendChild(spacer);
+      }
       el.appendChild(row);
     }
   }
