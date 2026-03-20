@@ -2,7 +2,7 @@
   "name": "Blackjack Counter",
   "short_name": "BJ Counter",
   "description": "Hi-Lo card counting tracker with basic strategy advisor",
-  "start_url": "./blackjack-tracker.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#07200f",
