@@ -469,18 +469,13 @@ header p{
   from{transform:translateY(-14px) scale(0.88) rotate(-2deg);opacity:0;}
   to{transform:translateY(0) scale(1) rotate(0);opacity:1;}
 }
-.pcard .rk{
-  font-family:'Oswald',sans-serif;font-weight:700;
-  font-size:1rem;line-height:1;color:#111;
-}
-.pcard .su{font-size:0.65rem;line-height:1;color:#111;}
-.pcard .sc{
-  font-size:1.5rem;line-height:1;
+.pcard .rk-center{
   position:absolute;top:50%;left:50%;
   transform:translate(-50%,-50%);
-  color:#111;
+  font-family:'Oswald',sans-serif;font-weight:700;
+  font-size:1.3rem;line-height:1;color:#111;
+  letter-spacing:0.02em;
 }
-.pcard.red-card .rk,.pcard.red-card .su,.pcard.red-card .sc{color:#c0172a;}
 .pcard.facedown{
   background:repeating-linear-gradient(135deg,#123d20 0,#123d20 5px,#0a2a14 5px,#0a2a14 10px);
   border:2px solid var(--border2);
@@ -960,19 +955,6 @@ header p{
     <div class="stat-box"><div class="stat-label">Decks Left</div><div class="stat-value neutral" id="dr2">6.0</div></div>
   </div>
 
-  <!-- SUIT TRACKER -->
-  <div class="sec">Suit Tracker</div>
-  <div class="hint" style="margin-bottom:10px;">Select suit · click pip to mark played · gold glow = dealer</div>
-  <div class="suit-sel-row">
-    <button class="suit-toggle active" data-suit="♠" onclick="setSuit('♠')">♠</button>
-    <button class="suit-toggle" data-suit="♥" onclick="setSuit('♥')">♥</button>
-    <button class="suit-toggle" data-suit="♦" onclick="setSuit('♦')">♦</button>
-    <button class="suit-toggle" data-suit="♣" onclick="setSuit('♣')">♣</button>
-  </div>
-  <div class="tracker-outer">
-    <div class="tracker-grid" id="cgrid"></div>
-  </div>
-
   <!-- Card History -->
   <div class="sec" style="margin-top:14px;">Card History</div>
   <div class="hist-strip" id="hist2"></div>
@@ -1163,7 +1145,7 @@ function renderDealerVis(){
     vis.appendChild(cr);return;
   }
   const cr=document.createElement('div');cr.className='cards-row';
-  dealerHand.forEach(c=>cr.appendChild(makeCard(c.rank,c.suit)));
+  dealerHand.forEach(c=>cr.appendChild(makeCard(c.rank)));
   vis.appendChild(cr);
   // Total below the cards
   if(dealerHand.length>0){
@@ -1181,7 +1163,6 @@ function renderDealerVis(){
 // ── RENDER PLAYER HAND ────────────────────────────────────
 function renderHandVis(){
   const vis=document.getElementById('my-hand-vis');vis.innerHTML='';
-  const ds=['♠','♥','♣','♦'];
 
   if(!isSplit){
     const hand=hands[0];
@@ -1191,7 +1172,7 @@ function renderHandVis(){
       vis.appendChild(cr);return;
     }
     hand.forEach((rank,i)=>{
-      const c=makeCard(rank,ds[i%4]);c.classList.add('clickable');
+      const c=makeCard(rank);c.classList.add('clickable');
       c.title='Tap to remove';c.addEventListener('click',()=>removeFromHand(0,i));cr.appendChild(c);
     });
     vis.appendChild(cr);
@@ -1224,7 +1205,7 @@ function renderHandVis(){
         cr.innerHTML='<div class="pcard-ph">+</div>';
       } else {
         hand.forEach((rank,i)=>{
-          const c=makeCard(rank,ds[(hi*2+i)%4]);c.classList.add('clickable');
+          const c=makeCard(rank);c.classList.add('clickable');
           if(activeHand===hi)c.style.outline='2px solid var(--gold)';
           c.title='Tap to remove';c.addEventListener('click',()=>removeFromHand(hi,i));cr.appendChild(c);
         });
@@ -1337,7 +1318,7 @@ function markCard(suit,rank){
   if(played[suit][rank]>=totalDecks){showToast('All '+rank+suit+' played!');return;}
   played[suit][rank]++;runningCount+=HI_LO[rank];
   history.push({suit,rank});
-  renderGrid();updateStats();renderHist();pulse('rc');
+  updateStats();renderHist();pulse('rc');
 }
 function rmFromHist(pred){for(let i=history.length-1;i>=0;i--){if(pred(history[i])){history.splice(i,1);break;}}}
 function rmAllFromHist(pred){history=history.filter(h=>!pred(h));}
@@ -1351,7 +1332,7 @@ function undoLast(){
     renderDealerVis();renderStratInline();
   }
   played[last.suit][last.rank]--;runningCount-=HI_LO[last.rank];
-  renderGrid();updateStats();renderHist();
+  updateStats();renderHist();
   showToast('Undid: '+last.rank+last.suit);
 }
 
@@ -1441,18 +1422,17 @@ function renderHist(){
 }
 
 // ── HELPERS ───────────────────────────────────────────────
-function makeCard(rank,suit){
-  const isRed=RED_S.has(suit);
+function makeCard(rank){
   const d=document.createElement('div');
-  d.className='pcard'+(isRed?' red-card':'');
-  d.innerHTML=`<div><div class="rk">${rank}</div><div class="su">${suit}</div></div><div class="sc">${suit}</div>`;
+  d.className='pcard';
+  d.innerHTML=`<div class="rk-center">${rank}</div>`;
   return d;
 }
 function pulse(id){const el=document.getElementById(id);if(!el)return;el.style.transform='scale(1.2)';setTimeout(()=>{el.style.transform='';el.style.transition='transform 0.2s';},130);}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2000);}
 
 function renderAll(){
-  renderGrid();updateStats();renderHist();
+  updateStats();renderHist();
   renderDealerVis();renderHandVis();renderStratInline();renderSplitToggle();
   document.getElementById('hand-num').textContent=handNum;
 }
