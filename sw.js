@@ -1,6 +1,6 @@
 const CACHE = 'bj-counter-v1';
 const ASSETS = [
-  './blackjack-tracker.html',
+  './index.html',
   './manifest.json',
   'https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Barlow+Condensed:wght@500;600&display=swap'
 ];
@@ -28,7 +28,7 @@ self.addEventListener('fetch', e => {
         const clone = res.clone();
         caches.open(CACHE).then(cache => cache.put(e.request, clone));
         return res;
-      }).catch(() => caches.match('./blackjack-tracker.html'));
+      }).catch(() => caches.match('./index.html'));
     })
   );
 });
