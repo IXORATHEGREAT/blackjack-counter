@@ -17,7 +17,7 @@
    Palette: deep velvet felt · aged gold · blood red
    Type: Impact/Oswald heavy for display, Barlow Condensed for UI
    Texture: subtle grain overlay, diagonal pattern, glow effects
-   UPDATED: Enhanced mobile responsiveness, animations, insurance & deviations
+   UPDATED: Fixed adjustment counting bug
 ═══════════════════════════════════════════════════════ */
 :root{
   --felt:#07200f;
@@ -789,6 +789,7 @@ header p{
 .hchip.pos{color:var(--hot);border-color:rgba(224,96,48,0.25);}
 .hchip.neg{color:var(--cold);border-color:rgba(46,184,184,0.25);}
 .hchip.deal{color:var(--gold);border-color:rgba(200,168,75,0.3);}
+.hchip.adjust{color:var(--gold);background:rgba(200,168,75,0.15);border-color:var(--gold-dim);}
 
 /* ══ TOAST ══ */
 .toast{
@@ -953,7 +954,7 @@ header p{
 
   <div class="game-grid">
 
-    <!-- DEALER COLUMN (NOW ABOVE PLAYER) -->
+    <!-- DEALER COLUMN -->
     <div>
       <div class="table-area" data-label="Dealer" id="dealer-area" onclick="setActiveTarget('dealer')">
         <div class="hand-row" id="dealer-hand-vis"></div>
@@ -974,11 +975,11 @@ header p{
         <div id="split-toggle-area"></div>
         <div class="hint" id="input-hint">Tap cards to remove · Click box to select</div>
         
-        <!-- COUNT ADJUST BUTTONS - MOVED HERE between hand and keypad -->
+        <!-- COUNT ADJUST BUTTONS -->
         <div class="count-adjust-bar">
-          <button class="adj-btn plus" onclick="adjustCount(1, true)">+1</button>
-          <button class="adj-btn zero" onclick="adjustCount(0, true)">0</button>
-          <button class="adj-btn minus" onclick="adjustCount(-1, true)">−1</button>
+          <button class="adj-btn plus" onclick="adjustCount(1)">+1</button>
+          <button class="adj-btn zero" onclick="adjustCount(0)">0</button>
+          <button class="adj-btn minus" onclick="adjustCount(-1)">−1</button>
         </div>
         
         <div class="kpad-wrap">
@@ -999,13 +1000,13 @@ header p{
 </div><!-- end tab-advisor -->
 
 <!-- ════════════════════════════════════════════
-     TAB 2 — QUICK INPUT + SUIT TRACKER
+     TAB 2 — QUICK INPUT
 ════════════════════════════════════════════ -->
 <div class="tab-panel" id="tab-quick">
 
   <!-- Quick buttons -->
-  <div class="sec">Quick Card Input</div>
-  <div class="hint" style="margin-bottom:10px;">Tap a rank to instantly log to the shoe</div>
+  <div class="sec">Quick Card Input (Shoe Only)</div>
+  <div class="hint" style="margin-bottom:10px;">Tap a rank to log to shoe · Does NOT add to hands</div>
 
   <div class="quick-grid">
     <button class="qbtn lo" data-v="+1" onclick="quickAdd('2')">2</button>
@@ -1035,10 +1036,11 @@ header p{
 
   <!-- Count Adjust Buttons in Quick Tab -->
   <div class="count-adjust-bar" style="margin-top:12px;">
-    <button class="adj-btn plus" onclick="adjustCount(1, true)">+1</button>
-    <button class="adj-btn zero" onclick="adjustCount(0, true)">0</button>
-    <button class="adj-btn minus" onclick="adjustCount(-1, true)">−1</button>
+    <button class="adj-btn plus" onclick="adjustCount(1)">+1</button>
+    <button class="adj-btn zero" onclick="adjustCount(0)">0</button>
+    <button class="adj-btn minus" onclick="adjustCount(-1)">−1</button>
   </div>
+  <div class="hint" style="margin-top:4px;font-size:0.5rem;">Adjust count without affecting specific ranks</div>
 
   <!-- Live mini stats -->
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;margin-bottom:12px;">
@@ -1066,31 +1068,18 @@ const DCOLS=['2','3','4','5','6','7','8','9','10','A'];
 
 // ── ILLUSTRIOUS 18 DEVIATIONS ─────────────────────────────
 const I18 = {
-  // Insurance: Take at TC >= 3
   insurance: { tc: 3, action: 'TAKE INSURANCE' },
-  // Stand on 16 vs 10 at TC >= 0
   '16v10': { tc: 0, basic: 'H', dev: 'S', desc: 'Stand 16 vs 10 at TC ≥ 0' },
-  // Stand on 15 vs 10 at TC >= 4
   '15v10': { tc: 4, basic: 'H', dev: 'S', desc: 'Stand 15 vs 10 at TC ≥ 4' },
-  // Stand on 16 vs 9 at TC >= 5
   '16v9': { tc: 5, basic: 'H', dev: 'S', desc: 'Stand 16 vs 9 at TC ≥ 5' },
-  // Stand on 13 vs 2 at TC >= -1
   '13v2': { tc: -1, basic: 'S', dev: 'H', desc: 'Hit 13 vs 2 at TC ≤ -1' },
-  // Stand on 12 vs 4 at TC >= 0
   '12v4': { tc: 0, basic: 'S', dev: 'H', desc: 'Hit 12 vs 4 at TC < 0' },
-  // Stand on 12 vs 3 at TC >= 2
   '12v3': { tc: 2, basic: 'H', dev: 'S', desc: 'Stand 12 vs 3 at TC ≥ 2' },
-  // Double 10 vs 10 at TC >= 4
   '10v10': { tc: 4, basic: 'H', dev: 'D', desc: 'Double 10 vs 10 at TC ≥ 4' },
-  // Double 9 vs 2 at TC >= 1
   '9v2': { tc: 1, basic: 'H', dev: 'D', desc: 'Double 9 vs 2 at TC ≥ 1' },
-  // Double 9 vs 7 at TC >= 4
   '9v7': { tc: 4, basic: 'H', dev: 'D', desc: 'Double 9 vs 7 at TC ≥ 4' },
-  // Double 11 vs A at TC >= 1
   '11vA': { tc: 1, basic: 'H', dev: 'D', desc: 'Double 11 vs A at TC ≥ 1' },
-  // Split 10s vs 5 at TC >= 5
   '10,10v5': { tc: 5, basic: 'S', dev: 'P', desc: 'Split 10s vs 5 at TC ≥ 5' },
-  // Split 10s vs 6 at TC >= 4
   '10,10v6': { tc: 4, basic: 'S', dev: 'P', desc: 'Split 10s vs 6 at TC ≥ 4' },
 };
 
@@ -1145,26 +1134,35 @@ const ADESC={
 };
 
 // ── STATE ─────────────────────────────────────────────────
-let totalDecks=6,runningCount=0,played={},history=[],activeSuit='♠';
+let totalDecks=6,runningCount=0,played={},history=[];
 let dealerHand=[],dealerPendingRank=null;
 let hands=[[]],activeHand=0,isSplit=false,handNum=1;
 let activeTarget='player'; // 'dealer' or 'player'
+let adjustmentCount = 0; // Track number of abstract adjustments
 
 // ── SHOE ──────────────────────────────────────────────────
 function initPlayed(){played={};SUITS.forEach(s=>{played[s]={};RANKS.forEach(r=>{played[s][r]=0;});});}
 function totalCards(){return totalDecks*52;}
-function totalPlayed(){let n=0;SUITS.forEach(s=>RANKS.forEach(r=>n+=played[s][r]));return n;}
+function totalPlayed(){
+  let n=0;
+  SUITS.forEach(s=>RANKS.forEach(r=>n+=played[s][r]));
+  // Add adjustment count to total cards played
+  n += adjustmentCount;
+  return n;
+}
 function decksRem(){return Math.max(0.1,(totalCards()-totalPlayed())/52);}
 function trueCount(){return runningCount/decksRem();}
 
 function setShoe(d){
   totalDecks=d;handNum=1;
+  adjustmentCount = 0; // Reset adjustment counter
   document.querySelectorAll('.shoe-btn').forEach(b=>b.classList.toggle('active',+b.dataset.decks===d));
   resetShoe(true);showToast(d+'-Deck shoe loaded');
 }
 function resetShoe(silent){
   runningCount=0;history=[];dealerHand=[];dealerPendingRank=null;
   hands=[[]];activeHand=0;isSplit=false;handNum=1;activeTarget='player';
+  adjustmentCount = 0; // Reset adjustment counter
   initPlayed();clearDealerUI();
   updateActiveTargetUI();
   renderAll();
@@ -1201,29 +1199,28 @@ function switchTab(id,btn){
   btn.classList.add('active');
 }
 
-// ── COUNT ADJUSTMENT (NOW COUNTS AS PLAYED CARD) ──────────
-function adjustCount(delta, countAsCard = true){
-  runningCount+=delta;
+// ── COUNT ADJUSTMENT (Now counts as played card - abstract) ──
+function adjustCount(delta){
+  // Update running count
+  runningCount += delta;
   
-  if(countAsCard){
-    // Create a virtual card to represent the count adjustment
-    const symbol=delta>0?'+':delta<0?'−':'0';
-    const adjRank = delta>0?'LOW':delta<0?'HIGH':'NEUT';
-    const adjSuit = '◆'; // Diamond as placeholder
-    
-    // Add to played cards tracking
-    if(!played['ADJ']) played['ADJ'] = {};
-    if(!played['ADJ'][adjRank]) played['ADJ'][adjRank] = 0;
-    played['ADJ'][adjRank]++;
-    
-    history.push({suit:adjSuit, rank:adjRank, isAdjust:true, delta:delta});
-  } else {
-    history.push({suit:'ADJ', rank:(delta>0?'+':'')+delta, isAdjust:true});
-  }
+  // Increment adjustment counter
+  adjustmentCount++;
+  
+  // Create an abstract "card" entry for history
+  const adjType = delta > 0 ? 'LOW' : (delta < 0 ? 'HIGH' : 'NEUT');
+  const adjSymbol = delta > 0 ? '+1' : (delta < 0 ? '−1' : '0');
+  
+  history.push({
+    isAdjust: true,
+    type: adjType,
+    delta: delta,
+    displayText: `${adjType} (${adjSymbol})`
+  });
   
   updateStats();renderHist();pulse('rc');
   renderAll();
-  showToast(`Count adjusted ${delta>0?'+'+delta:delta} ${countAsCard?'(card logged)':''}`);
+  showToast(`Count adjusted: ${adjSymbol} (${adjType} card logged)`);
 }
 
 // ── DEALER HAND ───────────────────────────────────────────
@@ -1254,69 +1251,55 @@ function calcHand(rs){let t=0,a=0;rs.forEach(r=>{if(r==='A'){a++;t+=11;}else t+=
 function isSoftH(rs){let t=0,a=0;rs.forEach(r=>{if(r==='A'){a++;t+=11;}else t+=rankVal(r);});while(t>21&&a>0){t-=10;a--;}return a>0;}
 function isPairH(rs){if(rs.length!==2)return false;const n=r=>(['10','J','Q','K'].includes(r)?'10':r);return n(rs[0])===n(rs[1]);}
 
-// ── PLAYER HAND (FIXED: NOW TRACKS CARDS PLAYED AND COUNT) ──
+// ── PLAYER HAND (FIXED: Now comes from shoe, affects count) ──
 function addToHand(r){
-  // Find available suit for this rank
+  // Find available suit for this rank from the shoe
   const suit=SUITS.find(s=>played[s][r]<totalDecks)||SUITS[0];
   if(played[suit][r]>=totalDecks){showToast('All '+r+'s played!');return;}
   
-  // Track the card as played
+  // Track the card as played from the shoe
   played[suit][r]++;
   runningCount+=HI_LO[r];
   
   // Add to history
   history.push({suit, rank:r, isPlayerCard:true, handIndex:activeHand});
   
-  // Add to player's hand
+  // Add to player's visual hand
   hands[activeHand].push(r);
   
   renderSplitToggle();renderHandVis();renderStratInline();renderInsurance();renderDeviation();
   updateStats();renderHist();
-  showToast(`Player: ${r}${suit}`);
+  showToast(`Player: ${r}${suit} (from shoe)`);
 }
 
 function removeFromHand(hi,ci){
   const removedRank = hands[hi][ci];
   hands[hi].splice(ci,1);
   
-  // Find and remove the card from played tracking
-  // Remove the most recent matching card from history and played
+  // Find and remove the card from history ONLY (card stays played in shoe)
   for(let i=history.length-1; i>=0; i--){
     const h=history[i];
     if(h.isPlayerCard && h.rank===removedRank && h.handIndex===hi){
-      played[h.suit][h.rank]--;
-      runningCount-=HI_LO[h.rank];
       history.splice(i,1);
       break;
     }
   }
+  // Note: We do NOT restore the card to played[] or adjust runningCount
+  // The card remains "burned" (played) - this is correct for card counting practice
   
   if(isSplit&&hands[hi].length===0){isSplit=false;hands=[hands[1-hi]||[]];activeHand=0;}
   renderSplitToggle();renderHandVis();renderStratInline();renderInsurance();renderDeviation();
-  updateStats();renderHist();
-  showToast(`Removed ${removedRank}`);
+  renderHist();
+  showToast(`Removed ${removedRank} from hand (card stays played)`);
 }
 
 function clearHand(){
-  // Remove all player cards from tracking
-  hands.forEach((hand, hi)=>{
-    hand.forEach(rank=>{
-      for(let i=history.length-1; i>=0; i--){
-        const h=history[i];
-        if(h.isPlayerCard && h.rank===rank && h.handIndex===hi){
-          played[h.suit][h.rank]--;
-          runningCount-=HI_LO[h.rank];
-          history.splice(i,1);
-          break;
-        }
-      }
-    });
-  });
-  
+  // Remove all player cards from history (but they stay played in shoe)
+  rmAllFromHist(h=>h.isPlayerCard);
   hands=[[]];activeHand=0;isSplit=false;
   renderSplitToggle();renderHandVis();renderStratInline();renderInsurance();renderDeviation();
-  updateStats();renderHist();
-  showToast('Your hand cleared');
+  renderHist();
+  showToast('Your hand cleared (cards remain played)');
 }
 
 function doSplit(){
@@ -1342,7 +1325,8 @@ function renderSplitToggle(){
 function renderInsurance(){
   const container=document.getElementById('insurance-container');
   const upRank=dealerUpRank();
-  if(!upRank||upRank!=='A'){
+  const hand=hands[activeHand];
+  if(!upRank||upRank!=='A'||!hand.length){
     container.innerHTML='';
     return;
   }
@@ -1376,7 +1360,6 @@ function renderDeviation(){
   
   let deviation=null;
   
-  // Check I18 deviations
   if(pair && hand[0]==='10' && dVal==='5' && tc>=5){
     deviation={desc:I18['10,10v5'].desc, action:'SPLIT'};
   } else if(pair && hand[0]==='10' && dVal==='6' && tc>=4){
@@ -1459,7 +1442,7 @@ function renderDealerVis(){
       runningCount-=HI_LO[removed.rank];
       rmFromHist(h=>(h.isDealerUp||h.isDealerHit)&&h.suit===removed.suit&&h.rank===removed.rank);
       renderAll();
-      showToast(`Removed ${removed.rank}${removed.suit}`);
+      showToast(`Removed ${removed.rank}${removed.suit} (returned to shoe)`);
     });
     cr.appendChild(card);
   });
@@ -1489,7 +1472,9 @@ function renderHandVis(){
     }
     hand.forEach((rank,i)=>{
       const c=makeCard(rank);c.classList.add('clickable');
-      c.title='Tap to remove';c.addEventListener('click',()=>removeFromHand(0,i));cr.appendChild(c);
+      c.title='Tap to remove (card stays played)';
+      c.addEventListener('click',()=>removeFromHand(0,i));
+      cr.appendChild(c);
     });
     vis.appendChild(cr);
     const tot=calcHand(hand),soft=isSoftH(hand);
@@ -1519,7 +1504,9 @@ function renderHandVis(){
         hand.forEach((rank,i)=>{
           const c=makeCard(rank);c.classList.add('clickable');
           if(activeHand===hi)c.style.outline='2px solid var(--gold)';
-          c.title='Tap to remove';c.addEventListener('click',()=>removeFromHand(hi,i));cr.appendChild(c);
+          c.title='Tap to remove (card stays played)';
+          c.addEventListener('click',()=>removeFromHand(hi,i));
+          cr.appendChild(c);
         });
       }
       group.appendChild(cr);
@@ -1610,6 +1597,7 @@ function updateBetBar(trc){
 
 // ── NEXT HAND ─────────────────────────────────────────────
 function nextHand(){
+  // Clear visual hands but keep shoe count (cards remain played)
   dealerHand=[];dealerPendingRank=null;
   hands=[[]];activeHand=0;isSplit=false;handNum++;
   activeTarget='player';
@@ -1619,34 +1607,35 @@ function nextHand(){
   showToast('New hand · shoe count preserved');
 }
 
-// ── CARD TRACKING ─────────────────────────────────────────
-function setSuit(s){activeSuit=s;document.querySelectorAll('.suit-toggle').forEach(b=>b.classList.toggle('active',b.dataset.suit===s));}
+// ── CARD TRACKING (Quick Add - shoe only) ─────────────────
 function quickAdd(rank){
-  let bS=null,bR=-1;SUITS.forEach(s=>{const r=totalDecks-played[s][rank];if(r>bR){bR=r;bS=s;}});
+  let bS=null,bR=-1;
+  SUITS.forEach(s=>{const r=totalDecks-played[s][rank];if(r>bR){bR=r;bS=s;}});
   if(bR<=0){showToast('All '+rank+'s played!');return;}
-  markCard(bS,rank);
-}
-function markCard(suit,rank){
-  if(played[suit][rank]>=totalDecks){showToast('All '+rank+suit+' played!');return;}
-  played[suit][rank]++;runningCount+=HI_LO[rank];
-  history.push({suit,rank});
+  played[bS][rank]++;runningCount+=HI_LO[rank];
+  history.push({suit:bS, rank, isQuickAdd:true});
   updateStats();renderHist();pulse('rc');
   renderAll();
+  showToast(`Logged: ${rank}${bS} (shoe only)`);
 }
+
 function rmFromHist(pred){for(let i=history.length-1;i>=0;i--){if(pred(history[i])){history.splice(i,1);break;}}}
 function rmAllFromHist(pred){history=history.filter(h=>!pred(h));}
 
 function undoLast(){
   if(!history.length){showToast('Nothing to undo');return;}
   const last=history.pop();
+  
   if(last.isAdjust){
     // Undo count adjustment
-    runningCount -= last.delta || 0;
-    showToast('Undid count adjustment');
+    runningCount -= last.delta;
+    adjustmentCount--; // Decrement adjustment counter
+    showToast(`Undid count adjustment: ${last.displayText}`);
   } else if(last.isDealerUp||last.isDealerHit){
     if(dealerHand.length>0) dealerHand.pop();
     played[last.suit][last.rank]--;runningCount-=HI_LO[last.rank];
     renderDealerVis();renderStratInline();renderInsurance();
+    showToast(`Undid: ${last.rank}${last.suit}`);
   } else if(last.isPlayerCard){
     // Remove from player hand
     for(let hi=0; hi<hands.length; hi++){
@@ -1656,13 +1645,18 @@ function undoLast(){
         break;
       }
     }
-    played[last.suit][last.rank]--;runningCount-=HI_LO[last.rank];
+    // Card stays played (we don't restore to shoe)
     renderHandVis();renderStratInline();
+    showToast(`Undid: ${last.rank}${last.suit} (card stays played)`);
+  } else if(last.isQuickAdd){
+    played[last.suit][last.rank]--;runningCount-=HI_LO[last.rank];
+    showToast(`Undid quick add: ${last.rank}${last.suit}`);
   } else {
     played[last.suit][last.rank]--;runningCount-=HI_LO[last.rank];
+    showToast(`Undid: ${last.rank}${last.suit}`);
   }
+  
   updateStats();renderHist();renderAll();
-  showToast('Undid: '+last.rank+(last.suit||''));
 }
 
 // ── STATS UPDATE ──────────────────────────────────────────
@@ -1701,17 +1695,24 @@ function updateStats(){
 function renderHist(){
   ['hist','hist2'].forEach(id=>{
     const s=document.getElementById(id);if(!s)return;s.innerHTML='';
-    history.slice(-60).reverse().forEach(({rank,suit,isDealerUp,isDealerHit,isAdjust,delta})=>{
+    history.slice(-60).reverse().forEach((h)=>{
       const c=document.createElement('span');
-      if(isAdjust){
-        c.className='hchip deal';
-        const symbol=delta>0?'+':delta<0?'−':'0';
-        c.textContent = delta>0?'LOW':delta<0?'HIGH':'NEUT';
+      if(h.isAdjust){
+        c.className='hchip adjust';
+        c.textContent = h.displayText || (h.type + ' ' + (h.delta>0?'+'+h.delta:h.delta));
+        c.title = 'Count adjustment (counts as played card)';
       } else {
-        const isD=isDealerUp||isDealerHit;
+        const isD=h.isDealerUp||h.isDealerHit;
+        const isQ=h.isQuickAdd;
         c.className='hchip'+(isD?' deal':'');
-        if(!isD){const v=HI_LO[rank];if(v>0)c.classList.add('pos');else if(v<0)c.classList.add('neg');}
-        c.textContent=rank+(suit||'')+(isDealerUp?' ★':isDealerHit?' ↑':'');
+        if(!isD&&!isQ){
+          const v=HI_LO[h.rank];
+          if(v>0)c.classList.add('pos');
+          else if(v<0)c.classList.add('neg');
+        }
+        c.textContent=h.rank+(h.suit||'')+(h.isDealerUp?' ★':h.isDealerHit?' ↑':h.isQuickAdd?' 📋':'');
+        if(h.isPlayerCard) c.title = 'Player card (from shoe)';
+        else if(h.isQuickAdd) c.title = 'Quick add (shoe only)';
       }
       s.appendChild(c);
     });
