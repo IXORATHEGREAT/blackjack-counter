@@ -1,1 +1,1 @@
-# blackjack-counter
+# blackjack-counter V2.1
