@@ -17,7 +17,7 @@
    Palette: deep velvet felt · aged gold · blood red
    Type: Impact/Oswald heavy for display, Barlow Condensed for UI
    Texture: subtle grain overlay, diagonal pattern, glow effects
-   UPDATED: Fixed adjustment counting bug
+   UPDATED: Fixed player card removal - now returns to shoe
 ═══════════════════════════════════════════════════════ */
 :root{
   --felt:#07200f;
@@ -1251,7 +1251,7 @@ function calcHand(rs){let t=0,a=0;rs.forEach(r=>{if(r==='A'){a++;t+=11;}else t+=
 function isSoftH(rs){let t=0,a=0;rs.forEach(r=>{if(r==='A'){a++;t+=11;}else t+=rankVal(r);});while(t>21&&a>0){t-=10;a--;}return a>0;}
 function isPairH(rs){if(rs.length!==2)return false;const n=r=>(['10','J','Q','K'].includes(r)?'10':r);return n(rs[0])===n(rs[1]);}
 
-// ── PLAYER HAND (FIXED: Now comes from shoe, affects count) ──
+// ── PLAYER HAND (FIXED: Now returns cards to shoe when removed) ──
 function addToHand(r){
   // Find available suit for this rank from the shoe
   const suit=SUITS.find(s=>played[s][r]<totalDecks)||SUITS[0];
@@ -1276,30 +1276,62 @@ function removeFromHand(hi,ci){
   const removedRank = hands[hi][ci];
   hands[hi].splice(ci,1);
   
-  // Find and remove the card from history ONLY (card stays played in shoe)
+  // Find and remove the card from history AND return it to the shoe
   for(let i=history.length-1; i>=0; i--){
     const h=history[i];
     if(h.isPlayerCard && h.rank===removedRank && h.handIndex===hi){
+      // Return card to shoe
+      played[h.suit][h.rank]--;
+      runningCount -= HI_LO[h.rank];
       history.splice(i,1);
       break;
     }
   }
-  // Note: We do NOT restore the card to played[] or adjust runningCount
-  // The card remains "burned" (played) - this is correct for card counting practice
   
-  if(isSplit&&hands[hi].length===0){isSplit=false;hands=[hands[1-hi]||[]];activeHand=0;}
-  renderSplitToggle();renderHandVis();renderStratInline();renderInsurance();renderDeviation();
+  if(isSplit && hands[hi].length===0){
+    isSplit=false;
+    hands=[hands[1-hi]||[]];
+    activeHand=0;
+  }
+  
+  renderSplitToggle();
+  renderHandVis();
+  renderStratInline();
+  renderInsurance();
+  renderDeviation();
+  updateStats();
   renderHist();
-  showToast(`Removed ${removedRank} from hand (card stays played)`);
+  showToast(`Removed ${removedRank} (returned to shoe)`);
 }
 
 function clearHand(){
-  // Remove all player cards from history (but they stay played in shoe)
-  rmAllFromHist(h=>h.isPlayerCard);
-  hands=[[]];activeHand=0;isSplit=false;
-  renderSplitToggle();renderHandVis();renderStratInline();renderInsurance();renderDeviation();
+  // Return all player cards to the shoe
+  hands.forEach((hand, hi) => {
+    hand.forEach(rank => {
+      for(let i=history.length-1; i>=0; i--){
+        const h=history[i];
+        if(h.isPlayerCard && h.rank===rank && h.handIndex===hi){
+          played[h.suit][h.rank]--;
+          runningCount -= HI_LO[h.rank];
+          history.splice(i,1);
+          break;
+        }
+      }
+    });
+  });
+  
+  hands=[[]];
+  activeHand=0;
+  isSplit=false;
+  
+  renderSplitToggle();
+  renderHandVis();
+  renderStratInline();
+  renderInsurance();
+  renderDeviation();
+  updateStats();
   renderHist();
-  showToast('Your hand cleared (cards remain played)');
+  showToast('Hand cleared (cards returned to shoe)');
 }
 
 function doSplit(){
@@ -1472,7 +1504,7 @@ function renderHandVis(){
     }
     hand.forEach((rank,i)=>{
       const c=makeCard(rank);c.classList.add('clickable');
-      c.title='Tap to remove (card stays played)';
+      c.title='Tap to remove (returns to shoe)';
       c.addEventListener('click',()=>removeFromHand(0,i));
       cr.appendChild(c);
     });
@@ -1504,7 +1536,7 @@ function renderHandVis(){
         hand.forEach((rank,i)=>{
           const c=makeCard(rank);c.classList.add('clickable');
           if(activeHand===hi)c.style.outline='2px solid var(--gold)';
-          c.title='Tap to remove (card stays played)';
+          c.title='Tap to remove (returns to shoe)';
           c.addEventListener('click',()=>removeFromHand(hi,i));
           cr.appendChild(c);
         });
@@ -1645,9 +1677,11 @@ function undoLast(){
         break;
       }
     }
-    // Card stays played (we don't restore to shoe)
+    // Return card to shoe
+    played[last.suit][last.rank]--;
+    runningCount -= HI_LO[last.rank];
     renderHandVis();renderStratInline();
-    showToast(`Undid: ${last.rank}${last.suit} (card stays played)`);
+    showToast(`Undid: ${last.rank}${last.suit} (returned to shoe)`);
   } else if(last.isQuickAdd){
     played[last.suit][last.rank]--;runningCount-=HI_LO[last.rank];
     showToast(`Undid quick add: ${last.rank}${last.suit}`);
