@@ -27,8 +27,9 @@
   --red2:#e52035;
   --white:#ede8dc;
   --white2:#f5f1e8;
-  --muted:#889888;
-  --muted2:#6a7a6a;
+  --muted:#a0b0a0;
+  --muted2:#7a8c7a;
+  --label:#c8d4c0;
   --hit:#2eb8b8;
   --stand:#d43050;
   --double:#d4aa28;
@@ -134,15 +135,15 @@ body::before{
   gap:3px;
 }
 .stat-label{
-  font-size:0.55rem;
-  color:var(--gold-dim);
+  font-size:0.68rem;
+  color:var(--label);
   text-transform:uppercase;
   letter-spacing:0.08em;
 }
 .stat-value{
   font-family:'Oswald',sans-serif;
   font-weight:700;
-  font-size:1.3rem;
+  font-size:1.15rem;
   line-height:1;
   text-shadow:0 2px 4px rgba(0,0,0,0.3);
 }
@@ -163,8 +164,8 @@ body::before{
   flex-shrink:0;
 }
 .deck-label{
-  font-size:0.55rem;
-  color:var(--gold-dim);
+  font-size:0.7rem;
+  color:var(--label);
   text-transform:uppercase;
   letter-spacing:0.12em;
 }
@@ -175,10 +176,10 @@ body::before{
 .deck-btn{
   background:transparent;
   border:1px solid var(--border2);
-  color:var(--muted);
+  color:var(--label);
   font-family:'Oswald',sans-serif;
   font-weight:600;
-  font-size:0.6rem;
+  font-size:0.72rem;
   padding:2px 10px;
   cursor:pointer;
   transition:all 0.2s ease;
@@ -198,8 +199,8 @@ body::before{
   box-shadow:0 0 12px rgba(200,168,75,0.3);
 }
 .cards-left{
-  font-size:0.55rem;
-  color:var(--muted);
+  font-size:0.7rem;
+  color:var(--label);
   text-transform:uppercase;
   letter-spacing:0.08em;
 }
@@ -261,8 +262,8 @@ body::before{
   padding:0 8px;
   font-family:'Oswald',sans-serif;
   font-weight:700;
-  font-size:0.5rem;
-  color:var(--gold-dim);
+  font-size:0.68rem;
+  color:var(--label);
   text-transform:uppercase;
   letter-spacing:0.15em;
   border-radius:3px;
@@ -335,11 +336,11 @@ body::before{
   display:inline-block;
   font-family:'Oswald',sans-serif;
   font-weight:700;
-  font-size:0.7rem;
+  font-size:0.82rem;
   background:rgba(0,0,0,0.5);
   padding:2px 8px;
   border:1px solid var(--border);
-  color:var(--gold);
+  color:var(--gold2);
   letter-spacing:0.05em;
   box-shadow:inset 0 1px 2px rgba(0,0,0,0.3);
   border-radius:3px;
@@ -396,7 +397,7 @@ body::before{
 .strategy-action{
   font-family:'Oswald',sans-serif;
   font-weight:700;
-  font-size:1.6rem;
+  font-size:1.4rem;
   line-height:1;
   min-width:60px;
   text-shadow:0 2px 4px rgba(0,0,0,0.3);
@@ -407,14 +408,36 @@ body::before{
   min-width:0;
 }
 .strategy-desc{
-  font-size:0.55rem;
-  color:var(--gold-dim);
+  font-size:0.72rem;
+  color:var(--label);
   text-transform:uppercase;
   letter-spacing:0.1em;
-  margin-bottom:2px;
+  margin-bottom:4px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
+}
+/* Deviation line */
+.deviation-line{
+  font-size:0.72rem;
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  margin-top:3px;
+  display:none;
+  align-items:center;
+  gap:4px;
+  transition:color 0.3s ease;
+}
+.deviation-line.show{ display:flex; }
+.deviation-line.strong{ color:var(--gold); }
+.deviation-line.mild{   color:var(--hot);  }
+.deviation-arrow{ font-size:0.8rem; line-height:1; }
+.deviation-action{ font-size:0.78rem; }
+.deviation-pct{
+  font-size:0.72rem;
+  opacity:0.9;
 }
 .strategy-probs{
   display:flex;
@@ -427,13 +450,13 @@ body::before{
   gap:3px;
 }
 .prob-label{
-  font-size:0.45rem;
-  color:var(--muted);
+  font-size:0.68rem;
+  color:var(--label);
   text-transform:uppercase;
 }
 .prob-value{
   font-family:'Oswald',sans-serif;
-  font-size:0.6rem;
+  font-size:0.74rem;
   font-weight:700;
   transition:color 0.2s ease;
 }
@@ -460,8 +483,8 @@ body::before{
   gap:5px;
 }
 .bet-label{
-  font-size:0.55rem;
-  color:var(--gold-dim);
+  font-size:0.7rem;
+  color:var(--label);
   text-transform:uppercase;
   letter-spacing:0.12em;
 }
@@ -474,10 +497,54 @@ body::before{
   transition:color 0.2s ease;
 }
 .bet-unit{
-  font-size:0.55rem;
-  color:var(--muted);
+  font-size:0.7rem;
+  color:var(--label);
   margin-left:2px;
   letter-spacing:0.05em;
+}
+.hand-counter{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-left:4px;
+  align-self:center;
+  gap:1px;
+}
+.hand-counter-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:0.62rem;
+  font-weight:500;
+  color:var(--label);
+  letter-spacing:0.1em;
+  line-height:1;
+}
+.hand-counter #handCounter{
+  font-family:'Oswald',sans-serif;
+  font-size:0.78rem;
+  font-weight:700;
+  color:var(--white2);
+  letter-spacing:0.05em;
+  line-height:1;
+}
+.bet-recovery-badge{
+  display:none;
+  font-size:0.62rem;
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:#000;
+  background:var(--hot);
+  padding:1px 5px;
+  border-radius:2px;
+  margin-left:4px;
+  vertical-align:middle;
+  animation:pulse 1.5s ease-in-out infinite;
+}
+.bet-recovery-badge.show{ display:inline-block; }
+@keyframes pulse{
+  0%,100%{ opacity:1; }
+  50%{ opacity:0.65; }
 }
 .bet-inputs{
   display:flex;
@@ -489,8 +556,8 @@ body::before{
   align-items:center;
 }
 .bet-input-label{
-  font-size:0.4rem;
-  color:var(--muted);
+  font-size:0.68rem;
+  color:var(--label);
   text-transform:uppercase;
   letter-spacing:0.1em;
   margin-bottom:2px;
@@ -559,13 +626,13 @@ body::before{
 .key.high{border-bottom:3px solid var(--cold);}
 .key.neutral{border-bottom:3px solid var(--muted2);}
 .key .key-main{
-  font-size:1.5rem;
+  font-size:1.3rem;
   line-height:1;
   text-shadow:0 1px 2px rgba(0,0,0,0.4);
 }
 .key .key-sub{
-  font-size:0.4rem;
-  color:var(--muted);
+  font-size:0.62rem;
+  color:var(--label);
   margin-top:-2px;
   letter-spacing:0.05em;
 }
@@ -592,10 +659,10 @@ body::before{
 .action-btn{
   background:transparent;
   border:1px solid var(--border2);
-  color:var(--muted);
+  color:var(--label);
   font-family:'Oswald',sans-serif;
   font-weight:600;
-  font-size:0.5rem;
+  font-size:0.68rem;
   text-transform:uppercase;
   letter-spacing:0.08em;
   padding:7px 2px;
@@ -681,8 +748,8 @@ body::before{
   margin-bottom:16px;
 }
 .menu-section-title{
-  font-size:0.65rem;
-  color:var(--gold-dim);
+  font-size:0.78rem;
+  color:var(--label);
   text-transform:uppercase;
   letter-spacing:0.15em;
   margin-bottom:8px;
@@ -696,8 +763,8 @@ body::before{
   margin-bottom:8px;
 }
 .prob-row-label{
-  font-size:0.6rem;
-  color:var(--muted);
+  font-size:0.72rem;
+  color:var(--label);
   min-width:85px;
   text-transform:uppercase;
 }
@@ -759,7 +826,7 @@ body::before{
 .menu-btn{
   background:linear-gradient(145deg,var(--panel2),var(--panel));
   border:1px solid var(--border2);
-  color:var(--white);
+  color:var(--white2);
   font-family:'Oswald',sans-serif;
   font-size:0.65rem;
   text-transform:uppercase;
@@ -780,12 +847,12 @@ body::before{
 ═══════════════════════════════════════════════════════ */
 @media (max-width:360px){
   .header-title{font-size:1rem;}
-  .stat-value{font-size:1.1rem;}
-  .strategy-action{font-size:1.3rem;min-width:50px;}
+  .stat-value{font-size:1.05rem;}
+  .strategy-action{font-size:1.25rem;min-width:50px;}
   .bet-value{font-size:1.2rem;}
-  .key .key-main{font-size:1.2rem;}
-  .bet-input{width:38px;font-size:0.65rem;}
-  .action-btn{font-size:0.45rem;padding:6px 1px;}
+  .key .key-main{font-size:1.1rem;}
+  .bet-input{width:40px;font-size:0.7rem;}
+  .action-btn{font-size:0.62rem;padding:6px 2px;}
 }
 @media (max-height:620px){
   .main{gap:3px;padding:4px 8px;}
@@ -831,12 +898,128 @@ body::before{
   text-shadow:0 2px 4px rgba(0,0,0,0.5);
 }
 .notification-sub{
-  font-size:0.55rem;
-  color:var(--muted);
+  font-size:0.68rem;
+  color:var(--label);
   margin-top:3px;
   text-transform:uppercase;
   letter-spacing:0.1em;
 }
+/* ═══════════════════════════════════════════════════════
+   VIEWER TAB
+═══════════════════════════════════════════════════════ */
+.viewer-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:var(--panel);
+  display:flex;flex-direction:column;
+  transform:translateY(100%);
+  transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);
+  overflow:hidden;
+}
+.viewer-overlay.show{transform:translateY(0);}
+.viewer-sheet{
+  display:flex;flex-direction:column;
+  height:100%;
+  max-width:430px;margin:0 auto;width:100%;
+  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0) 0;
+}
+.viewer-header{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px 10px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.viewer-title{
+  font-family:'Oswald',sans-serif;font-size:1rem;font-weight:700;
+  letter-spacing:0.15em;color:var(--gold);flex:1;
+}
+.viewer-seed-wrap{display:flex;align-items:center;gap:5px;}
+.viewer-seed-label{font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;}
+.viewer-seed{font-family:'Oswald',sans-serif;font-size:0.8rem;color:var(--white2);letter-spacing:0.12em;}
+.viewer-stats{
+  display:flex;gap:0;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.vstat{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:8px 4px;border-right:1px solid var(--border);
+}
+.vstat:last-child{border-right:none;}
+.vstat-label{font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;color:var(--label);letter-spacing:0.06em;margin-bottom:2px;}
+.vstat-value{font-family:'Oswald',sans-serif;font-size:0.9rem;font-weight:700;color:var(--white2);}
+.viewer-chart-wrap{
+  height:160px;flex-shrink:0;
+  padding:10px 10px 0;
+  border-bottom:1px solid var(--border);
+  background:var(--panel2);
+}
+.session-chart{width:100%;height:100%;display:block;}
+.viewer-log-header{
+  font-family:'Barlow Condensed',sans-serif;font-size:0.74rem;
+  letter-spacing:0.12em;color:var(--muted);
+  padding:6px 16px;border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.viewer-log{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.viewer-seed-bar{
+  display:flex;flex-direction:column;gap:0;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+  background:var(--panel2);
+}
+.seed-current-wrap,.seed-input-wrap{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 14px;
+}
+.seed-current-wrap{border-bottom:1px solid var(--border);}
+.seed-bar-label{
+  font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;
+  color:var(--label);letter-spacing:0.1em;min-width:50px;flex-shrink:0;
+}
+.seed-display{
+  font-family:'Oswald',sans-serif;font-size:0.78rem;
+  color:var(--gold);letter-spacing:0.1em;
+  flex:1;word-break:break-all;line-height:1.3;
+}
+.seed-copy-btn{
+  background:none;border:1px solid var(--border2);border-radius:4px;
+  color:var(--muted);font-size:1rem;padding:2px 6px;cursor:pointer;
+  flex-shrink:0;
+}
+.seed-copy-btn:active{color:var(--gold);}
+.seed-input{
+  flex:1;background:var(--panel);border:1px solid var(--border2);
+  border-radius:4px;color:var(--white2);
+  font-family:'Oswald',sans-serif;font-size:0.7rem;
+  letter-spacing:0.1em;padding:5px 8px;outline:none;
+  text-transform:uppercase;
+}
+.seed-input::placeholder{color:var(--muted2);font-size:0.65rem;letter-spacing:0.05em;}
+.seed-input:focus{border-color:var(--gold-dim);}
+.seed-load-btn{
+  background:var(--gold-dim);border:1px solid var(--gold);
+  border-radius:4px;color:var(--gold2);
+  font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;
+  font-weight:600;letter-spacing:0.1em;padding:5px 10px;
+  cursor:pointer;flex-shrink:0;
+}
+.seed-load-btn:active{background:var(--gold);}
+.log-row{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 12px;
+  border-bottom:1px solid rgba(24,71,42,0.35);
+}
+.log-num{font-family:'Oswald',sans-serif;font-size:0.72rem;color:var(--label);min-width:24px;}
+.log-cards{flex:1;display:flex;flex-direction:column;gap:2px;}
+.log-hand{display:flex;align-items:center;gap:4px;}
+.log-who{font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;color:var(--label);min-width:10px;}
+.log-hand-cards{font-family:'Barlow Condensed',sans-serif;font-size:0.78rem;color:var(--white2);letter-spacing:0.05em;flex:1;}
+.log-total{font-family:'Oswald',sans-serif;font-size:0.78rem;color:var(--label);}
+.log-meta{display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:80px;}
+.log-tc{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;color:var(--label);}
+.log-result{font-family:'Oswald',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;}
+.log-pnl{font-family:'Oswald',sans-serif;font-size:0.78rem;font-weight:700;}
+.log-cum{font-family:'Barlow Condensed',sans-serif;font-size:0.72rem;}
 </style>
 </head>
 <body>
@@ -873,7 +1056,7 @@ body::before{
   <div class="main">
     
     <!-- Hands -->
-    <div class="hands-row">
+    <div class="hands-row" id="handsRow">
       <div class="hand-box" id="dealerBox" onclick="setTarget('dealer')">
         <span class="hand-label">DEALER</span>
         <div class="cards-container" id="dealerCards"></div>
@@ -894,6 +1077,11 @@ body::before{
       <div class="strategy-action" id="strategyAction">-</div>
       <div class="strategy-info">
         <div class="strategy-desc" id="strategyDesc">ADD CARDS</div>
+        <div class="deviation-line" id="deviationLine">
+          <span class="deviation-arrow">→</span>
+          <span class="deviation-action" id="deviationAction"></span>
+          <span class="deviation-pct" id="deviationPct"></span>
+        </div>
         <div class="strategy-probs">
           <div class="prob-item"><span class="prob-label">10S</span><span class="prob-value" id="prob10s">31%</span></div>
           <div class="prob-item"><span class="prob-label">D-BUST</span><span class="prob-value" id="probDbust">28%</span></div>
@@ -910,6 +1098,8 @@ body::before{
       <span class="bet-label">BET</span>
       <span class="bet-value" id="betValue">$10</span>
       <span class="bet-unit" id="betUnit">1.0u</span>
+      <span class="bet-recovery-badge" id="recoveryBadge">RECOVERY</span>
+      <span class="hand-counter"><span class="hand-counter-label">HANDS</span><span id="handCounter">0</span></span>
     </div>
     <div class="bet-inputs">
       <div class="bet-input-group">
@@ -919,6 +1109,10 @@ body::before{
       <div class="bet-input-group">
         <span class="bet-input-label">MAX</span>
         <input type="number" class="bet-input" id="maxBet" value="200">
+      </div>
+      <div class="bet-input-group">
+        <span class="bet-input-label">BANK</span>
+        <input type="number" class="bet-input" id="bankroll" value="4000">
       </div>
     </div>
   </div>
@@ -939,6 +1133,34 @@ body::before{
 
 </div>
 
+<!-- Viewer Overlay -->
+<div class="viewer-overlay" id="viewerOverlay">
+  <div class="viewer-sheet">
+    <div class="viewer-header">
+      <span class="viewer-title">SESSION VIEWER</span>
+      <button class="menu-close" onclick="toggleViewer()">&times;</button>
+    </div>
+    <div class="viewer-seed-bar">
+      <div class="seed-current-wrap">
+        <span class="seed-bar-label">LIVE SEED</span>
+        <span class="seed-display" id="seedDisplay">--------</span>
+        <button class="seed-copy-btn" onclick="copySeed()" title="Copy seed">&#x2398;</button>
+      </div>
+      <div class="seed-input-wrap">
+        <span class="seed-bar-label">LOAD SEED</span>
+        <input class="seed-input" id="seedInput" type="text" placeholder="PASTE SEED HERE" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        <button class="seed-load-btn" onclick="loadSeed()">LOAD</button>
+      </div>
+    </div>
+    <div class="viewer-stats" id="viewerStats"></div>
+    <div class="viewer-chart-wrap">
+      <canvas class="session-chart" id="sessionChart"></canvas>
+    </div>
+    <div class="viewer-log-header">HAND HISTORY</div>
+    <div class="viewer-log" id="viewerLog"></div>
+  </div>
+</div>
+
 <!-- Notification -->
 <div class="notification" id="notification">
   <div class="notification-text" id="notifText"></div>
@@ -954,6 +1176,16 @@ body::before{
     </div>
     
     <div class="menu-section">
+      <div class="menu-section-title">SESSION</div>
+      <div id="menuSession" style="margin-bottom:8px;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+        <button class="menu-btn" style="border-color:var(--cold);color:var(--cold)" onclick="recordResult('win')">WIN</button>
+        <button class="menu-btn" style="border-color:var(--red);color:var(--red2)" onclick="recordResult('loss')">LOSS</button>
+        <button class="menu-btn" onclick="recordResult('push')">PUSH</button>
+      </div>
+    </div>
+
+    <div class="menu-section">
       <div class="menu-section-title">PROBABILITIES</div>
       <div id="menuProbs"></div>
     </div>
@@ -964,6 +1196,7 @@ body::before{
     </div>
     
     <div class="menu-actions">
+      <button class="menu-btn" onclick="toggleMenu();toggleViewer()">SESSION VIEWER</button>
       <button class="menu-btn" onclick="newShoe();toggleMenu()">NEW SHOE</button>
       <button class="menu-btn" onclick="resetHand();toggleMenu()">RESET HAND</button>
     </div>
@@ -985,7 +1218,68 @@ let target = 'player';
 let adjustments = 0;
 let notifTimer = null;
 
+// Session bankroll tracking
+const STARTING_BANKROLL = 4000;
+let sessionProfit = 0; // tracks net profit/loss from starting bankroll
+let sessionLog = []; // [{result,bet,cumulative,tc,playerCards,playerTotal,dealerCards,dealerTotal}]
+let sessionSeed = '';   // full encoded seed (updates each hand)
+let sessionSeedPrefix = ''; // 6-char random prefix, stable for the shoe
+let handCount = 0; // total hands played this session (increments on next())
+
 // Init
+function generateSeed() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+// Encode current session into a compact seed string
+// Format: PREFIX-BASE36_BANKROLL-HAND_RESULTS
+// Stored as: sessionSeedPrefix (6 chars) + encoded log appended as base chars
+function encodeSeed() {
+  if (!sessionLog.length) return sessionSeedPrefix;
+  // Encode each hand as single char: W=win, L=loss, P=push, plus bet magnitude
+  const bankroll = parseFloat(document.getElementById('bankroll').value) || STARTING_BANKROLL;
+  const parts = [
+    sessionSeedPrefix,
+    Math.round(bankroll).toString(36).toUpperCase(),
+    sessionLog.map(h => {
+      const r = h.result === 'win' ? 'W' : h.result === 'loss' ? 'L' : 'P';
+      return r + Math.abs(h.bet).toString(36).toUpperCase() + (h.cumulative < 0 ? 'n' : 'p') + Math.abs(h.cumulative).toString(36).toUpperCase();
+    }).join('.')
+  ];
+  return parts.join('-');
+}
+
+function decodeSeed(seed) {
+  try {
+    const parts = seed.trim().toUpperCase().split('-');
+    if (parts.length < 1) return null;
+    const prefix = parts[0];
+    const bankroll = parts.length >= 2 ? parseInt(parts[1], 36) : 4000;
+    const hands = [];
+    if (parts.length >= 3) {
+      const entries = parts[2].split('.');
+      let cumulative = 0;
+      for (const entry of entries) {
+        if (!entry) continue;
+        const result = entry[0] === 'W' ? 'win' : entry[0] === 'L' ? 'loss' : 'push';
+        // Find sign marker
+        const nIdx = entry.indexOf('N', 1);
+        const pIdx = entry.indexOf('P', 1);
+        const signIdx = nIdx > 0 ? nIdx : pIdx > 0 ? pIdx : -1;
+        let bet = 0;
+        if (signIdx > 1) {
+          bet = parseInt(entry.slice(1, signIdx), 36);
+          const neg = entry[signIdx] === 'N';
+          cumulative = parseInt(entry.slice(signIdx+1), 36) * (neg ? -1 : 1);
+        }
+        hands.push({ result, bet, cumulative });
+      }
+    }
+    return { prefix, bankroll, hands };
+  } catch(e) { return null; }
+}
+
 function init() {
   played = {};
   ['♠','♥','♦','♣'].forEach(s => {
@@ -1029,10 +1323,41 @@ function buildKeypad() {
 
 function handleKey(r, v, isAdj) {
   if (isAdj) {
-    running += v;
+    // Map count value to the ranks in that group
+    const groups = {
+       1: ['2','3','4','5','6'],        // low cards  → +1
+       0: ['7','8','9'],                // mid cards  →  0
+      '-1': ['10','J','Q','K','A'],     // high cards → -1
+    };
+    const pool = groups[String(v)];
+    // Find all ranks in the pool that still have cards remaining in the shoe
+    const available = pool.filter(rank => {
+      const bucket = ['J','Q','K'].includes(rank) ? '10' : rank;
+      return ['♠','♥','♦','♣'].some(s => played[s][bucket] < decks);
+    });
+    if (!available.length) { notify('NO CARDS LEFT', 'FOR THIS GROUP'); return; }
+    // Pick a random rank from the available ones
+    const pick = available[Math.floor(Math.random() * available.length)];
+    const bucket = ['J','Q','K'].includes(pick) ? '10' : pick;
+    const suit = ['♠','♥','♦','♣'].find(s => played[s][bucket] < decks) || '♠';
+    played[suit][bucket]++;
+    running += v; // use the button's count value directly
     adjustments++;
-    history.push({type:'adj', val:v});
+    history.push({ type:'adj', val:v, rank:pick, suit, bucket });
   } else {
+    // Block if the hand is already bust - allow the busting card itself
+    if (target === 'dealer') {
+      if (dealerHand.length > 0) {
+        const currentTotal = handTotal(dealerHand.map(c => c.rank));
+        if (currentTotal > 21) { notify('BUST', 'HAND ALREADY BUST'); return; }
+      }
+    } else {
+      if ((playerHands[activeHand] || []).length > 0) {
+        const currentTotal = handTotal(playerHands[activeHand] || []);
+        if (currentTotal > 21) { notify('BUST', 'HAND ALREADY BUST'); return; }
+      }
+    }
+
     const suit = ['♠','♥','♦','♣'].find(s => played[s][r] < decks) || '♠';
     if (played[suit][r] >= decks) { notify('NO CARDS LEFT'); return; }
     played[suit][r]++;
@@ -1061,7 +1386,7 @@ function setDecks(d) {
 function newShoe() {
   running = 0; history = []; redoStack = [];
   dealerHand = []; playerHands = [[]]; activeHand = 0; isSplit = false;
-  adjustments = 0;
+  adjustments = 0; sessionProfit = 0; sessionLog = []; sessionSeedPrefix = generateSeed(); sessionSeed = sessionSeedPrefix; handCount = 0;
   init();
   render();
   notify('NEW SHOE', decks + ' DECKS');
@@ -1091,8 +1416,20 @@ function resetHand() {
 
 function setTarget(t) {
   target = t;
-  document.getElementById('dealerBox').classList.toggle('active', t === 'dealer');
-  document.getElementById('playerBox').classList.toggle('active', t === 'player');
+  const db = document.getElementById('dealerBox');
+  const pb = document.getElementById('playerBox');
+  const sb0 = document.getElementById('splitBox0');
+  const sb1 = document.getElementById('splitBox1');
+  if (db) db.classList.toggle('active', t === 'dealer');
+  if (pb) pb.classList.toggle('active', t === 'player');
+  if (sb0) sb0.classList.toggle('active', t === 'player' && activeHand === 0);
+  if (sb1) sb1.classList.toggle('active', t === 'player' && activeHand === 1);
+}
+
+function setActiveHand(hi) {
+  activeHand = hi;
+  target = 'player';
+  render();
 }
 
 function clearTarget() {
@@ -1119,12 +1456,86 @@ function clearTarget() {
   render();
 }
 
+function autoDetectResult() {
+  // Determine win/loss/push from current hand state
+  const pHand = playerHands[activeHand] || [];
+  const dHand = dealerHand.map(c => c.rank);
+  const pTotal = handTotal(pHand);
+  const dTotal = handTotal(dHand);
+
+  // Can't detect if no cards on either side
+  if (!pHand.length || !dHand.length) return null;
+
+  if (pTotal > 21) return 'loss'; // player bust
+  if (dTotal > 21) return 'win';  // dealer bust
+  if (pTotal > dTotal) return 'win';
+  if (pTotal < dTotal) return 'loss';
+  return 'push';
+}
+
+function logHand(outcome) {
+  // Calculate bet at time of logging (same formula as recordResult)
+  const min = parseFloat(document.getElementById('minBet').value) || 10;
+  const max = parseFloat(document.getElementById('maxBet').value) || 200;
+  const bankroll = parseFloat(document.getElementById('bankroll').value) || STARTING_BANKROLL;
+  const currentBankroll = bankroll + sessionProfit;
+  const deficit = bankroll - currentBankroll;
+  const tc = trueCount();
+
+  let mult = 1;
+  if (tc > 3) mult = 8;
+  else if (tc > 2.5) mult = 6;
+  else if (tc > 1.5) mult = 4;
+  else if (tc > 0.5) mult = 2;
+
+  let recoveryMult = 1;
+  if (deficit > 0 && tc > 1) {
+    const deficitRatio = Math.min(deficit / bankroll, 0.5);
+    recoveryMult = Math.round((1 + deficitRatio * 2) * 10) / 10;
+  }
+
+  const bet = Math.min(Math.round(min * mult * recoveryMult), max);
+  if (outcome === 'win')  sessionProfit += bet;
+  if (outcome === 'loss') sessionProfit -= bet;
+
+  const pHand = playerHands[activeHand] || [];
+  const dHand = dealerHand.map(c => c.rank);
+  sessionLog.push({
+    result: outcome,
+    bet: outcome === 'push' ? 0 : bet,
+    cumulative: sessionProfit,
+    tc: parseFloat(tc.toFixed(1)),
+    playerCards: [...pHand],
+    playerTotal: handTotal(pHand),
+    dealerCards: [...dHand],
+    dealerTotal: handTotal(dHand),
+  });
+  sessionSeed = encodeSeed();
+
+  const seedDisplayEl = document.getElementById('seedDisplay');
+  if (seedDisplayEl) seedDisplayEl.textContent = sessionSeed;
+}
+
 function next() {
+  // Auto-detect and log result before clearing the hand
+  const outcome = autoDetectResult();
+  if (outcome) {
+    logHand(outcome);
+    handCount++;
+    const label = outcome === 'win' ? 'WIN' : outcome === 'loss' ? 'LOSS' : 'PUSH';
+    const sign = outcome === 'win' ? '+' : outcome === 'loss' ? '-' : '';
+    const lastLog = sessionLog[sessionLog.length - 1];
+    const amt = lastLog ? lastLog.bet : 0;
+    notify(label, amt ? sign + '$' + amt : 'NO CHANGE');
+  } else {
+    handCount++;
+    notify('NEXT HAND', 'HAND #' + handCount);
+  }
+
   dealerHand = []; playerHands = [[]]; activeHand = 0; isSplit = false;
   redoStack = [];
   setTarget('player');
   render();
-  notify('NEXT HAND');
 }
 
 function undo() {
@@ -1134,6 +1545,7 @@ function undo() {
   
   if (last.type === 'adj') {
     running -= last.val;
+    if (last.rank) played[last.suit][last.bucket]--;
     adjustments--;
   } else if (last.type === 'dealer') {
     const idx = dealerHand.findIndex(c => c.rank === last.rank && c.suit === last.suit);
@@ -1161,6 +1573,7 @@ function redo() {
   
   if (last.type === 'adj') {
     running += last.val;
+    if (last.rank) played[last.suit][last.bucket]++;
     adjustments++;
   } else if (last.type === 'dealer') {
     played[last.suit][last.rank]++;
@@ -1187,7 +1600,56 @@ function doSplit() {
   notify('PAIR SPLIT', c + 's');
 }
 
-function rankVal(r) { return r === 'A' ? 11 : ['J','Q','K'].includes(r) ? 10 : parseInt(r); }
+function recordResult(outcome) {
+  // outcome: 'win', 'loss', 'push'
+  const min = parseFloat(document.getElementById('minBet').value) || 10;
+  const max = parseFloat(document.getElementById('maxBet').value) || 200;
+  const bankroll = parseFloat(document.getElementById('bankroll').value) || STARTING_BANKROLL;
+  const currentBankroll = bankroll + sessionProfit;
+  const deficit = bankroll - currentBankroll;
+  const tc = trueCount();
+
+  let mult = 1;
+  if (tc > 3) mult = 8;
+  else if (tc > 2.5) mult = 6;
+  else if (tc > 1.5) mult = 4;
+  else if (tc > 0.5) mult = 2;
+
+  let recoveryMult = 1;
+  if (deficit > 0 && tc > 1) {
+    const deficitRatio = Math.min(deficit / bankroll, 0.5);
+    recoveryMult = Math.round((1 + deficitRatio * 2) * 10) / 10;
+  }
+
+  const bet = Math.min(Math.round(min * mult * recoveryMult), max);
+  if (outcome === 'win')  { sessionProfit += bet; notify('WIN', '+\$' + bet); }
+  if (outcome === 'loss') { sessionProfit -= bet; notify('LOSS', '-\$' + bet); }
+  if (outcome === 'push') { notify('PUSH', 'NO CHANGE'); }
+
+  // Log the hand
+  const pHand = playerHands[activeHand] || [];
+  const dHand = dealerHand.map(c => c.rank);
+  sessionLog.push({
+    result: outcome,
+    bet: outcome === 'push' ? 0 : bet,
+    cumulative: sessionProfit,
+    tc: parseFloat(trueCount().toFixed(1)),
+    playerCards: pHand,
+    playerTotal: handTotal(pHand),
+    dealerCards: dHand,
+    dealerTotal: handTotal(dHand),
+  });
+  sessionSeed = encodeSeed();
+  // Update seed display if viewer is open
+  const seedDisplayEl = document.getElementById('seedDisplay');
+  if (seedDisplayEl) seedDisplayEl.textContent = sessionSeed;
+  render();
+}
+function rankVal(r) {
+  if (['10','J','Q','K'].includes(r)) return 10;
+  return parseInt(r, 10) || 0;
+}
+
 function handTotal(h) {
   let t = 0, a = 0;
   h.forEach(r => { if (r === 'A') { a++; t += 11; } else t += rankVal(r); });
@@ -1367,6 +1829,82 @@ function evSplit(rank, dealerUpRank) {
   return handEV * 2; // two hands
 }
 
+// ═══════════════════════════════════════════════════════
+// BASIC STRATEGY STATIC TABLE
+// Standard 6-deck S17 basic strategy — never changes.
+// Rows: player total / soft / pair. Cols: dealer 2–A
+// H=Hit S=Stand D=Double P=Split R=Surrender
+// ═══════════════════════════════════════════════════════
+const BS_COLS = ['2','3','4','5','6','7','8','9','10','A'];
+const BS_HARD = {
+  5: ['H','H','H','H','H','H','H','H','H','H'],
+  6: ['H','H','H','H','H','H','H','H','H','H'],
+  7: ['H','H','H','H','H','H','H','H','H','H'],
+  8: ['H','H','H','H','H','H','H','H','H','H'],
+  9: ['H','D','D','D','D','H','H','H','H','H'],
+  10:['D','D','D','D','D','D','D','D','H','H'],
+  11:['D','D','D','D','D','D','D','D','D','H'],
+  12:['H','H','S','S','S','H','H','H','H','H'],
+  13:['S','S','S','S','S','H','H','H','H','H'],
+  14:['S','S','S','S','S','H','H','H','H','H'],
+  15:['S','S','S','S','S','H','H','H','R','H'],
+  16:['S','S','S','S','S','H','H','R','R','R'],
+  17:['S','S','S','S','S','S','S','S','S','S'],
+  18:['S','S','S','S','S','S','S','S','S','S'],
+  19:['S','S','S','S','S','S','S','S','S','S'],
+  20:['S','S','S','S','S','S','S','S','S','S'],
+  21:['S','S','S','S','S','S','S','S','S','S'],
+};
+// Soft totals (hand contains usable Ace), keyed by total
+const BS_SOFT = {
+  13:['H','H','H','D','D','H','H','H','H','H'], // A+2
+  14:['H','H','H','D','D','H','H','H','H','H'], // A+3
+  15:['H','H','D','D','D','H','H','H','H','H'], // A+4
+  16:['H','H','D','D','D','H','H','H','H','H'], // A+5
+  17:['H','D','D','D','D','H','H','H','H','H'], // A+6
+  18:['S','D','D','D','D','S','S','H','H','H'], // A+7
+  19:['S','S','S','S','S','S','S','S','S','S'], // A+8
+  20:['S','S','S','S','S','S','S','S','S','S'], // A+9
+};
+// Pairs, keyed by rank value
+const BS_PAIR = {
+  'A':['P','P','P','P','P','P','P','P','P','P'],
+  '2':['P','P','P','P','P','P','H','H','H','H'],
+  '3':['P','P','P','P','P','P','H','H','H','H'],
+  '4':['H','H','H','P','P','H','H','H','H','H'],
+  '5':['D','D','D','D','D','D','D','D','H','H'], // treat as hard 10
+  '6':['P','P','P','P','P','H','H','H','H','H'],
+  '7':['P','P','P','P','P','P','H','H','H','H'],
+  '8':['P','P','P','P','P','P','P','P','P','P'],
+  '9':['P','P','P','P','P','S','P','P','S','S'],
+  '10':['S','S','S','S','S','S','S','S','S','S'],
+};
+
+function basicStrategy(h, up) {
+  if (!up || !h || !h.length) return null;
+  const di = BS_COLS.indexOf(['J','Q','K'].includes(up) ? '10' : up);
+  if (di < 0) return null;
+  const t = handTotal(h);
+  if (t > 21) return null;
+
+  let code;
+  // Check pairs first
+  if (isPair(h) && !isSplit) {
+    const pairRank = ['J','Q','K'].includes(h[0]) ? '10' : h[0];
+    code = BS_PAIR[pairRank]?.[di] ?? null;
+  }
+  // Then soft hands
+  if (!code && isSoft(h) && BS_SOFT[t]) {
+    code = BS_SOFT[t][di];
+  }
+  // Fall back to hard totals
+  if (!code) {
+    const key = Math.min(21, Math.max(5, t));
+    code = BS_HARD[key]?.[di] ?? 'S';
+  }
+  return { action: code, ...ACTION_META[code] };
+}
+
 // Master strategy function — returns best action and all EVs
 function getStrategy(h, up) {
   if (!up || !h.length) return null;
@@ -1435,28 +1973,104 @@ function render() {
   document.getElementById('tc').className = 'stat-value ' + (tc > 0 ? 'positive' : tc < 0 ? 'negative' : 'neutral');
   document.getElementById('cardsLeft').textContent = totalCards() - totalPlayed();
   
-  const dc = document.getElementById('dealerCards');
-  if (!dealerHand.length) {
-    dc.innerHTML = '<div class="card-placeholder">+</div>';
-    document.getElementById('dealerTotal').innerHTML = '';
-  } else {
-    dc.innerHTML = dealerHand.map(c => `<div class="card ${getCardClass(c.rank)}" onclick="removeDealer(${dealerHand.indexOf(c)})"><span class="card-value">${c.rank}</span></div>`).join('');
-    const t = handTotal(dealerHand.map(c => c.rank));
-    document.getElementById('dealerTotal').innerHTML = `<span class="hand-total ${t > 21 ? 'bust' : ''}">${t}${t > 21 ? ' BUST' : ''}</span>`;
-  }
-  
-  const pc = document.getElementById('playerCards');
+  const handsRow = document.getElementById('handsRow');
   if (!isSplit) {
+    // Ensure normal 2-box layout exists (only rebuild structure if coming from split)
+    if (!document.getElementById('playerBox')) {
+      handsRow.innerHTML = `
+        <div class="hand-box" id="dealerBox" onclick="setTarget('dealer')">
+          <span class="hand-label">DEALER</span>
+          <div class="cards-container" id="dealerCards"></div>
+          <div id="dealerTotal"></div>
+        </div>
+        <div class="hand-box" id="playerBox" onclick="setTarget('player')">
+          <span class="hand-label">PLAYER</span>
+          <div class="cards-container" id="playerCards"></div>
+          <div id="playerTotal"></div>
+        </div>`;
+    }
+
+    // Update active state
+    document.getElementById('dealerBox').classList.toggle('active', target === 'dealer');
+    document.getElementById('playerBox').classList.toggle('active', target === 'player');
+
+    // Update dealer cards
+    const dc = document.getElementById('dealerCards');
+    if (!dealerHand.length) {
+      dc.innerHTML = '<div class="card-placeholder">+</div>';
+      document.getElementById('dealerTotal').innerHTML = '';
+    } else {
+      dc.innerHTML = dealerHand.map((c,i) => `<div class="card ${getCardClass(c.rank)}" onclick="removeDealer(${i})"><span class="card-value">${c.rank}</span></div>`).join('');
+      const t = handTotal(dealerHand.map(c => c.rank));
+      document.getElementById('dealerTotal').innerHTML = `<span class="hand-total ${t > 21 ? 'bust' : ''}">${t}${t > 21 ? ' BUST' : ''}</span>`;
+    }
+
+    // Update player cards
     const h = playerHands[0];
+    const pc = document.getElementById('playerCards');
     if (!h.length) {
       pc.innerHTML = '<div class="card-placeholder">+</div>';
       document.getElementById('playerTotal').innerHTML = '';
     } else {
-      pc.innerHTML = h.map((r, i) => `<div class="card ${getCardClass(r)}" onclick="removePlayer(0, ${i})"><span class="card-value">${r}</span></div>`).join('');
+      pc.innerHTML = h.map((r,i) => `<div class="card ${getCardClass(r)}" onclick="removePlayer(0,${i})"><span class="card-value">${r}</span></div>`).join('');
       const t = handTotal(h);
       const soft = isSoft(h);
       document.getElementById('playerTotal').innerHTML = `<span class="hand-total ${t > 21 ? 'bust' : soft ? 'soft' : ''}">${t}${soft && t < 21 ? ' SOFT' : ''}${t > 21 ? ' BUST' : ''}</span>`;
     }
+  } else {
+    // Ensure split 3-box layout exists (only rebuild structure if coming from normal)
+    if (!document.getElementById('splitBox0')) {
+      handsRow.style.gridTemplateColumns = '1fr 1fr';
+      handsRow.innerHTML = `
+        <div class="hand-box" id="dealerBox" onclick="setTarget('dealer')">
+          <span class="hand-label">DEALER</span>
+          <div class="cards-container" id="dealerCards"></div>
+          <div id="dealerTotal"></div>
+        </div>
+        <div class="hand-box" id="splitBox0" onclick="setActiveHand(0)">
+          <span class="hand-label">HAND 1</span>
+          <div class="cards-container" id="splitCards0"></div>
+          <div id="splitTotal0"></div>
+        </div>
+        <div class="hand-box" style="grid-column:1/2" id="splitBox1" onclick="setActiveHand(1)">
+          <span class="hand-label">HAND 2</span>
+          <div class="cards-container" id="splitCards1"></div>
+          <div id="splitTotal1"></div>
+        </div>`;
+    }
+
+    // Update active states
+    document.getElementById('dealerBox').classList.toggle('active', target === 'dealer');
+    document.getElementById('splitBox0').classList.toggle('active', activeHand === 0 && target === 'player');
+    document.getElementById('splitBox1').classList.toggle('active', activeHand === 1 && target === 'player');
+
+    // Update dealer cards
+    const dc = document.getElementById('dealerCards');
+    if (!dealerHand.length) {
+      dc.innerHTML = '<div class="card-placeholder">+</div>';
+      document.getElementById('dealerTotal').innerHTML = '';
+    } else {
+      dc.innerHTML = dealerHand.map((c,i) => `<div class="card ${getCardClass(c.rank)}" onclick="removeDealer(${i})"><span class="card-value">${c.rank}</span></div>`).join('');
+      const t = handTotal(dealerHand.map(c => c.rank));
+      document.getElementById('dealerTotal').innerHTML = `<span class="hand-total ${t > 21 ? 'bust' : ''}">${t}${t > 21 ? ' BUST' : ''}</span>`;
+    }
+
+    // Update each split hand
+    [0, 1].forEach(hi => {
+      const h = playerHands[hi] || [];
+      const cards = document.getElementById('splitCards' + hi);
+      const total = document.getElementById('splitTotal' + hi);
+      if (!cards) return;
+      if (!h.length) {
+        cards.innerHTML = '<div class="card-placeholder">+</div>';
+        total.innerHTML = '';
+      } else {
+        cards.innerHTML = h.map((r,i) => `<div class="card ${getCardClass(r)}" onclick="removePlayer(${hi},${i})"><span class="card-value">${r}</span></div>`).join('');
+        const t = handTotal(h);
+        const soft = isSoft(h);
+        total.innerHTML = `<span class="hand-total ${t > 21 ? 'bust' : soft ? 'soft' : ''}">${t}${soft && t < 21 ? ' SOFT' : ''}${t > 21 ? ' BUST' : ''}</span>`;
+      }
+    });
   }
   
   const sc = document.getElementById('splitControls');
@@ -1470,29 +2084,49 @@ function render() {
   
   const up = dealerHand.length ? dealerHand[0].rank : null;
   const h = playerHands[activeHand];
-  const strat = getStrategy(h, up);
+  const bs = basicStrategy(h, up);
   const box = document.getElementById('strategyBox');
   const action = document.getElementById('strategyAction');
   const desc = document.getElementById('strategyDesc');
-  
-  if (strat && up && h.length) {
-    action.textContent = strat.name;
-    action.style.color = `var(${strat.cssVar})`;
-    box.style.borderLeftColor = `var(${strat.cssVar})`;
+  const devLine = document.getElementById('deviationLine');
+  const devAction = document.getElementById('deviationAction');
+  const devPct = document.getElementById('deviationPct');
+
+  if (bs && up && h.length) {
+    // Primary display — always basic strategy, never changes
+    action.textContent = bs.name;
+    action.style.color = `var(${bs.cssVar})`;
+    box.style.borderLeftColor = `var(${bs.cssVar})`;
     const t = handTotal(h);
-    const handDesc = isPair(h) ? 'PAIR ' + h[0] + 's' : (isSoft(h) ? 'SOFT ' + t : 'HARD ' + t);
-    // Show EV breakdown as sub-description
-    const evParts = [];
-    if (strat.evs.H !== undefined) evParts.push(`H:${(strat.evs.H*100).toFixed(0)}`);
-    if (strat.evs.S !== undefined) evParts.push(`S:${(strat.evs.S*100).toFixed(0)}`);
-    if (strat.evs.D !== null) evParts.push(`D:${(strat.evs.D*100).toFixed(0)}`);
-    if (strat.evs.P !== null) evParts.push(`P:${(strat.evs.P*100).toFixed(0)}`);
-    desc.textContent = `${handDesc} vs ${up} · EV ${evParts.join(' ')}`;
+    const handDesc = isPair(h) && !isSplit ? 'PAIR ' + h[0] + 's' : (isSoft(h) ? 'SOFT ' + t : 'HARD ' + t);
+    desc.textContent = `${handDesc} vs ${up}`;
+
+    // Deviation line — EV engine runs silently, only surfaces when gap is meaningful
+    const evStrat = getStrategy(h, up);
+    if (evStrat) {
+      const bsEV  = evStrat.evs[bs.action] ?? -Infinity;
+      const bestEV = evStrat.bestEV;
+      // Gap = how much better the live best action is vs what BS recommends
+      const gapPct = Math.round((bestEV - bsEV) * 100);
+      const liveIsDifferent = evStrat.action !== bs.action;
+
+      if (liveIsDifferent && gapPct >= 2) {
+        const liveMeta = ACTION_META[evStrat.action];
+        devAction.textContent = liveMeta.name;
+        devPct.textContent = '+' + gapPct + '%';
+        devLine.className = 'deviation-line show ' + (gapPct >= 7 ? 'strong' : 'mild');
+      } else {
+        devLine.className = 'deviation-line';
+      }
+    } else {
+      devLine.className = 'deviation-line';
+    }
   } else {
     action.textContent = '-';
     action.style.color = 'var(--muted)';
     desc.textContent = !up ? 'SET DEALER CARD' : 'ADD YOUR CARDS';
     box.style.borderLeftColor = 'var(--hit)';
+    devLine.className = 'deviation-line';
   }
   
   const tp = tenProb();
@@ -1507,16 +2141,46 @@ function render() {
   
   const min = parseFloat(document.getElementById('minBet').value) || 10;
   const max = parseFloat(document.getElementById('maxBet').value) || 200;
+  const bankroll = parseFloat(document.getElementById('bankroll').value) || STARTING_BANKROLL;
+  const currentBankroll = bankroll + sessionProfit;
+  const deficit = bankroll - currentBankroll; // positive when losing
+
+  // Base count-driven spread (same as before)
   let mult = 1;
   if (tc > 3) mult = 8;
   else if (tc > 2.5) mult = 6;
   else if (tc > 1.5) mult = 4;
   else if (tc > 0.5) mult = 2;
-  const bet = Math.min(min * mult, max);
+
+  // Recovery mode: in deficit AND count is favorable (TC > 1)
+  // Apply an additional recovery multiplier on top of count spread
+  // Scaled proportionally to deficit size — bigger hole = more aggressive
+  const inRecovery = deficit > 0 && tc > 1;
+  let recoveryMult = 1;
+  if (inRecovery) {
+    const deficitRatio = Math.min(deficit / bankroll, 0.5); // cap at 50% of bankroll
+    // Scale from 1.0x (small deficit) to 2.0x (large deficit)
+    recoveryMult = 1 + deficitRatio * 2;
+    recoveryMult = Math.round(recoveryMult * 10) / 10;
+  }
+
+  const totalMult = mult * recoveryMult;
+  const bet = Math.min(Math.round(min * totalMult), max);
+
   const betVal = document.getElementById('betValue');
   betVal.textContent = '$' + bet;
   betVal.style.color = tc > 1 ? 'var(--hot)' : tc > 0 ? 'var(--gold)' : 'var(--cold)';
-  document.getElementById('betUnit').textContent = mult.toFixed(1) + 'u';
+
+  const unitLabel = inRecovery
+    ? `${mult.toFixed(1)}u ×${recoveryMult.toFixed(1)}`
+    : `${mult.toFixed(1)}u`;
+  document.getElementById('betUnit').textContent = unitLabel;
+
+  const badge = document.getElementById('recoveryBadge');
+  badge.className = 'bet-recovery-badge' + (inRecovery ? ' show' : '');
+
+  const hc = document.getElementById('handCounter');
+  if (hc) hc.textContent = handCount;
 }
 
 function removeDealer(i) {
@@ -1565,6 +2229,36 @@ function toggleMenu() {
   const m = document.getElementById('menuOverlay');
   m.classList.toggle('show');
   if (m.classList.contains('show')) {
+    // Session P&L
+    const bankroll = parseFloat(document.getElementById('bankroll').value) || STARTING_BANKROLL;
+    const currentBankroll = bankroll + sessionProfit;
+    const pnlColor = sessionProfit >= 0 ? 'var(--cold)' : 'var(--red2)';
+    const pnlSign = sessionProfit >= 0 ? '+' : '';
+    const wins = sessionLog.filter(h=>h.result==='win').length;
+    const losses = sessionLog.filter(h=>h.result==='loss').length;
+    const pushes = sessionLog.filter(h=>h.result==='push').length;
+    document.getElementById('menuSession').innerHTML = `
+      <div class="prob-row">
+        <span class="prob-row-label">STARTING</span>
+        <span class="prob-row-value" style="color:var(--gold)">$${bankroll.toLocaleString()}</span>
+      </div>
+      <div class="prob-row">
+        <span class="prob-row-label">CURRENT</span>
+        <span class="prob-row-value" style="color:var(--white)">$${currentBankroll.toLocaleString()}</span>
+      </div>
+      <div class="prob-row">
+        <span class="prob-row-label">P&L</span>
+        <span class="prob-row-value" style="color:${pnlColor}">${pnlSign}$${sessionProfit.toLocaleString()}</span>
+      </div>
+      <div class="prob-row">
+        <span class="prob-row-label">HANDS</span>
+        <span class="prob-row-value" style="color:var(--white)">${handCount}</span>
+      </div>
+      <div class="prob-row">
+        <span class="prob-row-label">W / L / P</span>
+        <span class="prob-row-value"><span style="color:var(--cold)">${wins}</span> / <span style="color:var(--red2)">${losses}</span> / <span style="color:var(--muted)">${pushes}</span></span>
+      </div>`;
+
     const tp = tenProb();
     const db = dealerBustProb(dealerHand.length ? dealerHand[0].rank : null);
     const pb = playerHands[activeHand].length ? playerBustProb(playerHands[activeHand]) : 0;
@@ -1585,8 +2279,195 @@ function closeMenu(e) {
   if (e.target === document.getElementById('menuOverlay')) toggleMenu();
 }
 
+// ─── VIEWER TAB ──────────────────────────────────────────
+let viewerOpen = false;
+let viewerReplayData = null; // when set, viewer shows loaded seed data instead of live
+
+function renderViewer() {
+  const data = viewerReplayData || null;
+  const displaySeed = data ? data._rawSeed : sessionSeed;
+  const seedEl = document.getElementById('seedDisplay');
+  if (seedEl) seedEl.textContent = displaySeed || '--------';
+
+  const log = data ? data.hands : sessionLog;
+  const profit = log.length ? log[log.length-1].cumulative : 0;
+  const bankroll = data ? data.bankroll : (parseFloat(document.getElementById('bankroll').value) || STARTING_BANKROLL);
+  const wins = log.filter(h=>h.result==='win').length;
+  const losses = log.filter(h=>h.result==='loss').length;
+  const pushes = log.filter(h=>h.result==='push').length;
+  const total = wins + losses + pushes;
+  const pnlColor = profit >= 0 ? 'var(--cold)' : 'var(--red2)';
+  const pnlSign = profit >= 0 ? '+' : '';
+
+  document.getElementById('viewerStats').innerHTML = `
+    <div class="vstat"><span class="vstat-label">HANDS</span><span class="vstat-value">${total}</span></div>
+    <div class="vstat"><span class="vstat-label">WIN</span><span class="vstat-value" style="color:var(--cold)">${wins}</span></div>
+    <div class="vstat"><span class="vstat-label">LOSS</span><span class="vstat-value" style="color:var(--red2)">${losses}</span></div>
+    <div class="vstat"><span class="vstat-label">PUSH</span><span class="vstat-value" style="color:var(--muted)">${pushes}</span></div>
+    <div class="vstat"><span class="vstat-label">P&L</span><span class="vstat-value" style="color:${pnlColor}">${pnlSign}$${Math.abs(profit)}</span></div>
+  `;
+
+  drawSessionChart(log);
+
+  const logEl = document.getElementById('viewerLog');
+  if (!log.length) {
+    logEl.innerHTML = '<div style="color:var(--muted);text-align:center;padding:24px;font-size:0.75rem;letter-spacing:0.1em;">NO HANDS RECORDED YET</div>';
+    return;
+  }
+  logEl.innerHTML = [...log].reverse().map((h, i) => {
+    const idx = log.length - i;
+    const col = h.result === 'win' ? 'var(--cold)' : h.result === 'loss' ? 'var(--red2)' : 'var(--muted)';
+    const sign = h.result === 'win' ? '+' : h.result === 'loss' ? '-' : '±';
+    const cumSign = h.cumulative >= 0 ? '+' : '';
+    const cumCol = h.cumulative >= 0 ? 'var(--cold)' : 'var(--red2)';
+    const pCards = (h.playerCards || []).join(' ') || '—';
+    const dCards = (h.dealerCards || []).join(' ') || '—';
+    return `
+      <div class="log-row">
+        <div class="log-num">#${idx}</div>
+        <div class="log-cards">
+          <div class="log-hand"><span class="log-who">P</span><span class="log-hand-cards">${pCards}</span><span class="log-total">${h.playerTotal||0}</span></div>
+          <div class="log-hand"><span class="log-who">D</span><span class="log-hand-cards">${dCards}</span><span class="log-total">${h.dealerTotal||0}</span></div>
+        </div>
+        <div class="log-meta">
+          <span class="log-tc">TC ${h.tc >= 0 ? '+' : ''}${h.tc}</span>
+          <span class="log-result" style="color:${col}">${h.result.toUpperCase()}</span>
+          <span class="log-pnl" style="color:${col}">${sign}$${Math.abs(h.bet)}</span>
+          <span class="log-cum" style="color:${cumCol}">${cumSign}$${h.cumulative}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function drawSessionChart(log) {
+  log = log || sessionLog;
+  const canvas = document.getElementById('sessionChart');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.offsetWidth;
+  const h = canvas.offsetHeight;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, w, h);
+
+  const points = [0, ...log.map(e => e.cumulative)];
+
+  if (points.length < 2) {
+    ctx.fillStyle = 'rgba(136,152,136,0.45)';
+    ctx.font = '500 11px Barlow Condensed';
+    ctx.textAlign = 'center';
+    ctx.fillText('RECORD A HAND TO SEE THE CHART', w/2, h/2);
+    return;
+  }
+
+  const pad = { t:12, r:8, b:20, l:42 };
+  const cw = w - pad.l - pad.r;
+  const ch = h - pad.t - pad.b;
+  const minV = Math.min(0, ...points);
+  const maxV = Math.max(0, ...points);
+  const range = maxV - minV || 1;
+  const xS = i => pad.l + (i / (points.length - 1)) * cw;
+  const yS = v => pad.t + ch - ((v - minV) / range) * ch;
+  const zero = yS(0);
+
+  // Zero dashed line
+  ctx.strokeStyle = 'rgba(136,152,136,0.22)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3,4]);
+  ctx.beginPath(); ctx.moveTo(pad.l, zero); ctx.lineTo(pad.l+cw, zero); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Gradient fill
+  for (let i = 0; i < points.length - 1; i++) {
+    const x1=xS(i),x2=xS(i+1),y1=yS(points[i]),y2=yS(points[i+1]);
+    ctx.beginPath();
+    ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.lineTo(x2,zero); ctx.lineTo(x1,zero);
+    ctx.closePath();
+    ctx.fillStyle = points[i+1] >= 0 ? 'rgba(46,184,184,0.13)' : 'rgba(229,32,53,0.13)';
+    ctx.fill();
+  }
+
+  // Main line
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  points.forEach((v,i) => { i===0 ? ctx.moveTo(xS(i),yS(v)) : ctx.lineTo(xS(i),yS(v)); });
+  const last = points[points.length-1];
+  ctx.strokeStyle = last >= 0 ? '#2eb8b8' : '#e52035';
+  ctx.stroke();
+
+  // Dots
+  points.forEach((v,i) => {
+    ctx.beginPath();
+    ctx.arc(xS(i),yS(v),2.5,0,Math.PI*2);
+    ctx.fillStyle = v >= 0 ? '#2eb8b8' : '#e52035';
+    ctx.fill();
+  });
+
+  // Y labels
+  ctx.fillStyle = 'rgba(136,152,136,0.65)';
+  ctx.font = '500 9px Barlow Condensed';
+  ctx.textAlign = 'right';
+  const yLabels = [...new Set([minV, 0, maxV])];
+  yLabels.forEach(v => {
+    ctx.fillText((v>=0?'+':'')+'$'+v, pad.l-4, yS(v)+3);
+  });
+
+  // X labels
+  ctx.fillStyle = 'rgba(136,152,136,0.5)';
+  ctx.textAlign = 'center';
+  ctx.font = '500 9px Barlow Condensed';
+  const step = Math.max(1, Math.floor((points.length-1)/5));
+  for (let i = 0; i < points.length; i += step) {
+    ctx.fillText(i===0 ? 'START' : '#'+i, xS(i), h - pad.b + 12);
+  }
+  if ((points.length-1) % step !== 0) {
+    ctx.fillText('#'+(points.length-1), xS(points.length-1), h - pad.b + 12);
+  }
+}
+
+function copySeed() {
+  const seed = sessionSeed || sessionSeedPrefix;
+  if (!seed) return;
+  navigator.clipboard.writeText(seed).then(() => notify('SEED COPIED', seed.slice(0,8)+'...')).catch(() => {
+    // fallback
+    const el = document.createElement('textarea');
+    el.value = seed; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+    notify('SEED COPIED', '');
+  });
+}
+
+function loadSeed() {
+  const input = document.getElementById('seedInput').value.trim();
+  if (!input) { notify('NO SEED', 'PASTE A SEED FIRST'); return; }
+  const decoded = decodeSeed(input);
+  if (!decoded || !decoded.hands.length) {
+    notify('INVALID SEED', 'CHECK AND RETRY');
+    return;
+  }
+  decoded._rawSeed = input;
+  viewerReplayData = decoded;
+  document.getElementById('seedInput').value = '';
+  renderViewer();
+  notify('SEED LOADED', decoded.hands.length + ' HANDS');
+}
+
+// Clear replay when viewer is closed
+function toggleViewer() {
+  viewerOpen = !viewerOpen;
+  document.getElementById('viewerOverlay').classList.toggle('show', viewerOpen);
+  if (viewerOpen) {
+    viewerReplayData = null; // always open to live view
+    renderViewer();
+  }
+}
+
 // Start
 buildKeypad();
+sessionSeedPrefix = generateSeed();
+sessionSeed = sessionSeedPrefix;
 render();
 setTarget('player');
 </script>
