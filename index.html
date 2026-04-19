@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#07200f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>BLACKJACK COUNTER PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="app">
+  
+  <!-- Header -->
+  <div class="header">
+    <span class="header-title">BJ ELITE</span>
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="stat-label">RC</span>
+        <span class="stat-value neutral" id="rc">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">TC</span>
+        <span class="stat-value neutral" id="tc">0.0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deck Bar -->
+  <div class="deck-bar">
+    <span class="deck-label">DECKS</span>
+    <div class="deck-btns">
+      <button class="deck-btn" onclick="app.setDecks(3)">3</button>
+      <button class="deck-btn active" onclick="app.setDecks(6)">6</button>
+      <button class="deck-btn" onclick="app.setDecks(8)">8</button>
+    </div>
+    <span class="cards-left">LEFT<span id="cardsLeft">312</span></span>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    
+    <!-- Hands -->
+    <div class="hands-row" id="handsRow">
+      <div class="hand-box" id="dealerBox" onclick="app.setTarget('dealer')">
+        <span class="hand-label">DEALER</span>
+        <div class="cards-container" id="dealerCards"></div>
+        <div id="dealerTotal"></div>
+      </div>
+      <div class="hand-box active" id="playerBox" onclick="app.setTarget('player')">
+        <span class="hand-label">PLAYER</span>
+        <div class="cards-container" id="playerCards"></div>
+        <div id="playerTotal"></div>
+      </div>
+    </div>
+
+    <!-- Split Controls -->
+    <div id="splitControls"></div>
+
+    <!-- Strategy Box -->
+    <div class="strategy-box" id="strategyBox">
+      <div class="strategy-action" id="strategyAction">-</div>
+      <div class="strategy-info">
+        <div class="strategy-desc" id="strategyDesc">ADD CARDS</div>
+        <div class="deviation-line" id="deviationLine">
+          <span class="deviation-arrow">→</span>
+          <span class="deviation-action" id="deviationAction"></span>
+          <span class="deviation-pct" id="deviationPct"></span>
+        </div>
+        <div class="strategy-probs">
+          <div class="prob-item"><span class="prob-label">10S</span><span class="prob-value" id="prob10s">31%</span></div>
+          <div class="prob-item"><span class="prob-label">D-BUST</span><span class="prob-value" id="probDbust">28%</span></div>
+          <div class="prob-item"><span class="prob-label">P-BUST</span><span class="prob-value" id="probPbust">0%</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bet Bar -->
+  <div class="bet-bar">
+    <div class="bet-suggestion">
+      <span class="bet-label">BET</span>
+      <span class="bet-value" id="betValue">$10</span>
+      <span class="bet-unit" id="betUnit">1.0u</span>
+      <span class="bet-recovery-badge" id="recoveryBadge">RECOVERY</span>
+      <span class="hand-counter"><span class="hand-counter-label">HANDS</span><span id="handCounter">0</span></span>
+    </div>
+    <div class="bet-inputs">
+      <div class="bet-input-group">
+        <span class="bet-input-label">MIN</span>
+        <input type="number" class="bet-input" id="minBet" value="10">
+      </div>
+      <div class="bet-input-group">
+        <span class="bet-input-label">MAX</span>
+        <input type="number" class="bet-input" id="maxBet" value="200">
+      </div>
+      <div class="bet-input-group">
+        <span class="bet-input-label">BANK</span>
+        <input type="number" class="bet-input" id="bankroll" value="4000">
+      </div>
+    </div>
+  </div>
+
+  <!-- Keypad -->
+  <div class="keypad-section">
+    <div class="keypad" id="keypad"></div>
+  </div>
+
+  <!-- Action Bar -->
+  <div class="action-bar">
+    <button class="action-btn" onclick="app.undo()">UNDO</button>
+    <button class="action-btn" onclick="app.redo()">REDO</button>
+    <button class="action-btn" onclick="app.next()">NEXT</button>
+    <button class="action-btn" onclick="app.confirmAction('clear')">CLEAR</button>
+    <button class="action-btn primary" onclick="app.toggleMenu()">MENU</button>
+  </div>
+
+</div>
+
+<!-- Viewer Overlay -->
+<div class="viewer-overlay" id="viewerOverlay">
+  <div class="viewer-sheet">
+    <div class="viewer-header">
+      <span class="viewer-title">SESSION VIEWER</span>
+      <button class="menu-close" onclick="app.toggleViewer()">&times;</button>
+    </div>
+    <div class="viewer-seed-bar">
+      <div class="seed-current-wrap">
+        <span class="seed-bar-label">LIVE SEED</span>
+        <span class="seed-display" id="seedDisplay">--------</span>
+        <button class="seed-copy-btn" onclick="app.copySeed()" title="Copy seed">&#x2398;</button>
+      </div>
+      <div class="seed-input-wrap">
+        <span class="seed-bar-label">LOAD SEED</span>
+        <input class="seed-input" id="seedInput" type="text" placeholder="PASTE SEED HERE" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        <button class="seed-load-btn" onclick="app.loadSeed()">LOAD</button>
+      </div>
+    </div>
+    <div class="viewer-stats" id="viewerStats"></div>
+    <div class="viewer-chart-wrap">
+      <canvas class="session-chart" id="sessionChart"></canvas>
+    </div>
+    <div class="viewer-log-header">HAND HISTORY</div>
+    <div class="viewer-log" id="viewerLog"></div>
+  </div>
+</div>
+
+<!-- Bet Confirm Popup -->
+<div class="bet-popup-overlay" id="betPopupOverlay">
+  <div class="bet-popup">
+    <div class="bet-popup-title">NEXT HAND BET</div>
+    <div id="popupResultBadge" class="bet-popup-result-badge none">—</div>
+    <div class="bet-popup-section">
+      <div class="bet-popup-label">SUGGESTED BET</div>
+      <div class="bet-popup-amount" id="popupSuggestedAmt">$10</div>
+      <div class="bet-popup-units" id="popupSuggestedUnits">1.0u</div>
+    </div>
+    <div class="bet-popup-divider"></div>
+    <div class="bet-popup-current-row">
+      <span class="bet-popup-current-label">PREVIOUS BET</span>
+      <span class="bet-popup-current-val" id="popupPrevAmt">—</span>
+    </div>
+    <div class="bet-popup-current-row">
+      <span class="bet-popup-current-label">TRUE COUNT</span>
+      <span class="bet-popup-current-val" id="popupTC">+0.0</span>
+    </div>
+    <div class="bet-popup-current-row">
+      <span class="bet-popup-current-label">SESSION P&amp;L</span>
+      <span class="bet-popup-current-val" id="popupPnl">+$0</span>
+    </div>
+    <div class="bet-popup-divider"></div>
+    <div class="bet-popup-manual-row">
+      <span class="bet-popup-current-label">ENTER YOUR BET</span>
+      <div class="bet-popup-manual-input-wrap">
+        <span class="bet-popup-dollar">$</span>
+        <input type="number" class="bet-popup-manual-input" id="popupManualBet" placeholder="—" min="1">
+      </div>
+    </div>
+    <button class="bet-popup-ok" onclick="app.confirmBet()">OK — SET BET</button>
+  </div>
+</div>
+
+<!-- Bet Adjust Popup -->
+<div class="bet-popup-overlay" id="betAdjPopupOverlay">
+  <div class="bet-popup">
+    <div class="bet-popup-title" id="betAdjTitle">SPLIT — BET DOUBLED</div>
+    <div class="bet-popup-section">
+      <div class="bet-popup-label">NEW TOTAL BET</div>
+      <div class="bet-popup-amount" id="adjPopupAmt">$20</div>
+      <div class="bet-popup-units" id="adjPopupUnits">2 × original</div>
+    </div>
+    <div class="bet-popup-divider"></div>
+    <div class="bet-popup-current-row">
+      <span class="bet-popup-current-label">ORIGINAL BET</span>
+      <span class="bet-popup-current-val" id="adjPopupOriginal">$10</span>
+    </div>
+    <div class="bet-popup-divider"></div>
+    <div class="bet-popup-manual-row">
+      <span class="bet-popup-current-label">OVERRIDE AMOUNT</span>
+      <div class="bet-popup-manual-input-wrap">
+        <span class="bet-popup-dollar">$</span>
+        <input type="number" class="bet-popup-manual-input" id="adjPopupManualBet" placeholder="—" min="1">
+      </div>
+    </div>
+    <button class="bet-popup-ok" onclick="app.confirmAdjBet()">OK — CONFIRM BET</button>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-dialog">
+    <div class="confirm-title" id="confirmTitle">ARE YOU SURE?</div>
+    <div class="confirm-sub" id="confirmSub">This cannot be undone.</div>
+    <div class="confirm-btns">
+      <button class="confirm-btn no" onclick="app.confirmCancel()">CANCEL</button>
+      <button class="confirm-btn yes" onclick="app.confirmProceed()">YES, DO IT</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification -->
+<div class="notification" id="notification">
+  <div class="notification-text" id="notifText"></div>
+  <div class="notification-sub" id="notifSub"></div>
+</div>
+
+<!-- Menu Overlay -->
+<div class="menu-overlay" id="menuOverlay" onclick="app.closeMenu(event)">
+  <div class="menu-sheet" onclick="event.stopPropagation()">
+    <div class="menu-header">
+      <span class="menu-title">ANALYTICS</span>
+      <button class="menu-close" onclick="app.toggleMenu()">&times;</button>
+    </div>
+    
+    <div class="menu-section">
+      <div class="menu-section-title">SESSION</div>
+      <div id="menuSession" style="margin-bottom:8px;"></div>
+    </div>
+
+    <div class="menu-section">
+      <div class="menu-section-title">PROBABILITIES</div>
+      <div id="menuProbs"></div>
+    </div>
+    
+    <div class="menu-section">
+      <div class="menu-section-title">DECK COMPOSITION</div>
+      <div class="remaining-grid" id="menuDeck"></div>
+    </div>
+    
+    <div class="menu-actions">
+      <button class="menu-btn" onclick="app.toggleMenu();app.toggleViewer()">SESSION VIEWER</button>
+      <button class="menu-btn" onclick="app.confirmAction('newShoe')">NEW SHOE</button>
+      <button class="menu-btn" onclick="app.confirmAction('resetHand')">RESET HAND</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/state.js"></script>
+<script src="js/deck.js"></script>
+<script src="js/ev-engine.js"></script>
+<script src="js/strategy.js"></script>
+<script src="js/betting.js"></script>
+<script src="js/insurance.js"></script>
+<script src="js/session.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
